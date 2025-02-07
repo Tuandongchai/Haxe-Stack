@@ -23,4 +23,22 @@ public class Hexagon : MonoBehaviour
         transform.SetParent(parent);
     }
     public void DisableCollider()=> collider.enabled = false;
+
+    public void Vanish(float delay)
+    {
+        LeanTween.cancel(gameObject);
+
+        LeanTween.scale(gameObject, Vector3.zero, 0.2f)
+            .setEase(LeanTweenType.easeInBack)
+            .setDelay(delay)
+            .setOnComplete(()=>Destroy(gameObject));
+    }
+
+    public void MoveToLocal(Vector3 targetLocalPos)
+    {
+        LeanTween.moveLocal(gameObject, targetLocalPos, .2f)
+            .setEase(LeanTweenType.easeInOutSine)
+            .setDelay(transform.GetSiblingIndex() * .01f);
+
+    }
 }

@@ -17,6 +17,15 @@ public class MergeManager : MonoBehaviour
 
     private void StackPlacedCallback(GridCell gridCell)
     {
+        StartCoroutine((StackPlacedCoroutine(gridCell)));
+
+    }
+    IEnumerator StackPlacedCoroutine(GridCell gridCell)
+    {
+        yield return CheckForMerge(gridCell);
+    }
+    IEnumerator CheckForMerge(GridCell gridCell)
+    {
         //Does this cell has neighbors ?
 
 
@@ -24,14 +33,18 @@ public class MergeManager : MonoBehaviour
 
         if(neighborGridCells.Count <= 0)
         {
-            return;
+            yield break;
         }
         // At this point, we have a list of the neighbor grid cells, that are occupied
         Color gridCellTopHexagonColor = gridCell.Stack.GetTopHexagonColor();
 
         //Do there neighbors have the same top hex color ?
         List<GridCell> similarNeighborGridCells = GetSimilarNeighborGridCells(gridCellTopHexagonColor, neighborGridCells.ToArray());
-        if(similarNeighborGridCells.Count <= 0) { return; }
+        if(similarNeighborGridCells.Count <= 0)
+        {
+            yield break;
+            
+        }
 
         //At this point we have a list of similar neighbors
         List<Hexagon> hexagonsToAdd = GetHexagonsToAdd(gridCellTopHexagonColor, similarNeighborGridCells.ToArray());
@@ -43,12 +56,13 @@ public class MergeManager : MonoBehaviour
         //we have some free grid cell
 
         MoveHexagons(gridCell, hexagonsToAdd);
+        yield return new WaitForSeconds(0.2f+ (hexagonsToAdd.Count+1) * 0.01f);
 
         // Is the stack on this cell complete
         // Does it have 10 or more similar hexagons ?
-        CheckForCompleteStack(gridCell, gridCellTopHexagonColor);
-    }
+        yield return CheckForCompleteStack(gridCell, gridCellTopHexagonColor);
 
+    }
 
     private List<GridCell> GetNeighborGridCells(GridCell gridCell)
     {
@@ -129,13 +143,14 @@ public class MergeManager : MonoBehaviour
             Vector3 targetLocalPosition = Vector3.up * targetY;
 
             gridCell.Stack.Add(hexagon);
-            hexagon.transform.localPosition = targetLocalPosition;
+ 
+            hexagon.MoveToLocal(targetLocalPosition);
         }
     }
-    private void CheckForCompleteStack(GridCell gridCell, Color topColor)
+    private IEnumerator CheckForCompleteStack(GridCell gridCell, Color topColor)
     {
         if (gridCell.Stack.Hexagons.Count < 10)
-            return;
+            yield break;
 
         List<Hexagon> similarHexagons = new List<Hexagon>();
         for(int i = gridCell.Stack.Hexagons.Count -1; i >= 0; i--)
@@ -146,16 +161,26 @@ public class MergeManager : MonoBehaviour
                 break;
             similarHexagons.Add(hexagon);
         }
+        int similarHexagonCount = similarHexagons.Count;
 
         if (similarHexagons.Count < 10)
-            return;
+            yield break;
+
+        float delay = 0;
+
         while(similarHexagons.Count > 0)
         {
             similarHexagons[0].SetParent(null);
-            gridCell.Stack.Remove(similarHexagons[0]);
+            similarHexagons[0].Vanish(delay);
 
-            DestroyImmediate(similarHexagons[0].gameObject);
+            //DestroyImmediate(similarHexagons[0].gameObject);
+
+            delay += 0.01f;
+            
+            gridCell.Stack.Remove(similarHexagons[0]);
             similarHexagons.RemoveAt(0);
         }
+
+        yield return new WaitForSeconds(0.2f +(similarHexagonCount+1) * 0.1f);
     }
 }
