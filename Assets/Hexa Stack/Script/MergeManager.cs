@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class MergeManager : MonoBehaviour
 {
+    [Header("Elements")]
+    private List<GridCell> updateCells = new List<GridCell>();
+
     private void Awake()
     {
         StackController.onStackPlaced += StackPlacedCallback;
@@ -22,10 +25,18 @@ public class MergeManager : MonoBehaviour
     }
     IEnumerator StackPlacedCoroutine(GridCell gridCell)
     {
-        yield return CheckForMerge(gridCell);
+        updateCells.Add(gridCell);
+
+        while(updateCells.Count > 0) 
+            yield return CheckForMerge(updateCells[0]);
     }
     IEnumerator CheckForMerge(GridCell gridCell)
     {
+        updateCells.Remove(gridCell);
+
+
+        if(!gridCell.IsOccupied)
+            yield break;
         //Does this cell has neighbors ?
 
 
@@ -45,6 +56,7 @@ public class MergeManager : MonoBehaviour
             yield break;
             
         }
+        updateCells.AddRange(similarNeighborGridCells);
 
         //At this point we have a list of similar neighbors
         List<Hexagon> hexagonsToAdd = GetHexagonsToAdd(gridCellTopHexagonColor, similarNeighborGridCells.ToArray());
@@ -180,6 +192,7 @@ public class MergeManager : MonoBehaviour
             gridCell.Stack.Remove(similarHexagons[0]);
             similarHexagons.RemoveAt(0);
         }
+        updateCells.Add(gridCell);
 
         yield return new WaitForSeconds(0.2f +(similarHexagonCount+1) * 0.1f);
     }
