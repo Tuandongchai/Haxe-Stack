@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+#if UNITY_EDITOR
+using UnityEditor;
+
 public class GridGenerator : MonoBehaviour
 {
     [Header("Elements")]
@@ -18,13 +21,21 @@ public class GridGenerator : MonoBehaviour
 
         for(int x= -gridSize; x<=gridSize; x++)
         {
-            for(int y = -gridSize; y<=gridSize; y++)
+            for(int y = - gridSize; y<=gridSize; y++)
             {
                 Vector3 spawnPos = grid.CellToWorld(new Vector3Int(x,y,0));
                 if (spawnPos.magnitude > grid.CellToWorld(new Vector3Int(1, 0, 0)).magnitude * gridSize)
                     continue;
-                Instantiate(hexagon, spawnPos, Quaternion.identity, transform);
+
+                GameObject gridHexInstance = (GameObject)PrefabUtility.InstantiatePrefab(hexagon);
+                gridHexInstance.transform.position = spawnPos;
+                gridHexInstance.transform.rotation = Quaternion.identity;
+                gridHexInstance.transform.SetParent(transform);
+
+
+                //Instantiate(hexagon, spawnPos, Quaternion.identity, transform);
             }
         }
     }
 }
+#endif

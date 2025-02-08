@@ -46,16 +46,22 @@ public class MergeManager : MonoBehaviour
         {
             yield break;
         }
+        
         // At this point, we have a list of the neighbor grid cells, that are occupied
         Color gridCellTopHexagonColor = gridCell.Stack.GetTopHexagonColor();
 
         //Do there neighbors have the same top hex color ?
+
+        
         List<GridCell> similarNeighborGridCells = GetSimilarNeighborGridCells(gridCellTopHexagonColor, neighborGridCells.ToArray());
-        if(similarNeighborGridCells.Count <= 0)
+
+        
+        if (similarNeighborGridCells.Count <= 0)
         {
             yield break;
             
         }
+        // them cac o co mau dinh cung mau vao updateCells
         updateCells.AddRange(similarNeighborGridCells);
 
         //At this point we have a list of similar neighbors
@@ -75,7 +81,7 @@ public class MergeManager : MonoBehaviour
         yield return CheckForCompleteStack(gridCell, gridCellTopHexagonColor);
 
     }
-
+    // tra ve cac o lien ke
     private List<GridCell> GetNeighborGridCells(GridCell gridCell)
     {
         LayerMask gridCellMask = 1 << gridCell.gameObject.layer;
@@ -92,13 +98,17 @@ public class MergeManager : MonoBehaviour
                 continue;
             if (neighborGridCell == gridCell)
                 continue;
-
             neighborGridCells.Add(neighborGridCell);
+            
         }
+        
         return neighborGridCells;
     }
+
+    // tra ve cac o lien ke cung mau
     private List<GridCell> GetSimilarNeighborGridCells(Color gridCellTopHexagonColor, GridCell[] neighborGridCells)
     {
+        
         List<GridCell> similarNeighborGridCells= new List<GridCell>();
 
         foreach (GridCell neighborGridCell in neighborGridCells)
@@ -110,6 +120,7 @@ public class MergeManager : MonoBehaviour
                 similarNeighborGridCells.Add(neighborGridCell);
             }
         }
+        
         return similarNeighborGridCells;
     }
     private List<Hexagon> GetHexagonsToAdd(Color gridCellTopHexagonColor, GridCell[] similarNeighborGridCells)

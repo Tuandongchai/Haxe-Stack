@@ -104,6 +104,14 @@ public class StackController : MonoBehaviour
             currentStack = null;
             return;
         }
+
+        if (targetCell.Stack != null)
+        {
+            currentStack.transform.position = currentStackInitialPos;
+            currentStack = null;
+            return;
+
+        }
         currentStack.transform.position = targetCell.transform.position.With(y: 0.2f);
         currentStack.transform.SetParent(targetCell.transform);
         currentStack.Place();
