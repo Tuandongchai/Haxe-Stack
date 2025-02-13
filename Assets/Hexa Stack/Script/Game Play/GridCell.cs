@@ -57,7 +57,7 @@ public class GridCell : MonoBehaviour
 
             Hexagon hexagonInstance = Instantiate(hexagonPrefab, spawnPosition, Quaternion.identity);
             hexagonInstance.Color = hexagonColors[i];
-
+            hexagonInstance.GetComponent<MeshCollider>().enabled=false;
             Stack.Add(hexagonInstance);
 
         }

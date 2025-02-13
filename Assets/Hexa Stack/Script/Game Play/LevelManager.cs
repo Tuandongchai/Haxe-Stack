@@ -26,7 +26,6 @@ public class LevelManager : MonoBehaviour
         else
             Destroy(gameObject);
 
-        PlayerPrefs.SetInt("Level", 0);
         
     }
 
@@ -36,25 +35,25 @@ public class LevelManager : MonoBehaviour
     }
     private void Update()
     {
-        Lose();
-        
+         Lose();
+
         if (piecesCount >= piecesRequire)
             Win();
     }
     private void GenerateLevels()
     {
-        GameObject currentLevel = level[PlayerPrefs.GetInt("Level")];
+        GameObject currentLevel = level[StatsManager.Instance.GetCurrentLevel()];
 
         Vector3 position = transform.position;
         levelSpawner = Instantiate(currentLevel, position, Quaternion.identity);
         levelSpawner.transform.SetParent(transform);
 
-        piecesRequire = pieces[PlayerPrefs.GetInt("Level")];
+        piecesRequire = pieces[StatsManager.Instance.GetCurrentLevel()];
         
     }
     public void NextLevel()
     {
-        PlayerPrefs.SetInt("Level", PlayerPrefs.GetInt("Level") + 1);
+        StatsManager.Instance.IncreasedLevel();
         SceneManager.LoadScene(1);
     }
     public void Win()
@@ -89,5 +88,8 @@ public class LevelManager : MonoBehaviour
             }
         }
         GameManager.instance.SetGameState(GameState.Lose);
+        if (GameUIManager.Instance.loseUIAnimation.losePanels.active == true)
+            yield break;
+        GameUIManager.Instance.loseUIAnimation.LoadIn();
     }
 }

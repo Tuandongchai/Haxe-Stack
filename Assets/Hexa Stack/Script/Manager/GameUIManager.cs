@@ -14,6 +14,7 @@ public class GameUIManager : MonoBehaviour, IGameStateListener
     private GameObject[] panels;
 
     public WinUIAnimation winUIAnimation;
+    public LoseUIAnimation loseUIAnimation;
 
 
 

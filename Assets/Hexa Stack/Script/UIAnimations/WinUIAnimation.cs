@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class WinUIAnimation : MonoBehaviour
@@ -7,6 +8,8 @@ public class WinUIAnimation : MonoBehaviour
     [Header("Element")]
     public GameObject winPanel;
     [SerializeField] private GameObject coinPrefab;
+    [SerializeField] private TextMeshProUGUI levelText;
+    [SerializeField] private TextMeshProUGUI goldText;
 
     [Header("Setting")]
     [SerializeField] private Transform coinParent;
@@ -15,6 +18,8 @@ public class WinUIAnimation : MonoBehaviour
 
     public void LoadIn()
     {
+        levelText.text = "Level "+ StatsManager.Instance.GetCurrentLevel();
+        goldText.text = "" + StatsManager.Instance.GetCurrentGolds();
         winPanel.transform.localScale = Vector3.zero;
         LeanTween.scale(winPanel, new Vector3(1,1,1), 0.3f).setEase(LeanTweenType.easeOutBounce);
 

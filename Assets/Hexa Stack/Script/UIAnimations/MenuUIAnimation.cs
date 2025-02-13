@@ -17,12 +17,14 @@ public class MenuUIAnimation : MonoBehaviour
 
     [Header("Settings")]
     [SerializeField] private TextMeshProUGUI levelText;
+    [SerializeField] private TextMeshProUGUI heartText;
+    [SerializeField] private TextMeshProUGUI goldText;
 
     [SerializeField] private GameObject bg;
 
     private void Start()
     {
-        levelText.text = "Level "+(PlayerPrefs.GetInt("Level")+1).ToString();
+        Show();
     }
 
     public void StartAnimation()
@@ -63,6 +65,7 @@ public class MenuUIAnimation : MonoBehaviour
         {
             LeanTween.moveLocalY(go, 916, duration).setEase(LeanTweenType.easeInBack);
         }
+        Show();
     }
     public void LoadOut()
     {
@@ -76,6 +79,10 @@ public class MenuUIAnimation : MonoBehaviour
         }
     }
     
-
+    public void Show()
+    {
+        levelText.text = "Level " + StatsManager.Instance.GetCurrentLevel();
+        goldText.text = StatsManager.Instance.GetCurrentGolds().ToString();
+    }
 
 }
