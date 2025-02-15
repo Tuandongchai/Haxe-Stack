@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     public GameState gameState;
 
+    public GameUIAnimation gameUIAnimation;
     private void Start()
     {
         if (instance == null)

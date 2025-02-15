@@ -20,6 +20,7 @@ public class MenuUIAnimation : MonoBehaviour
     [SerializeField] private TextMeshProUGUI heartText;
     [SerializeField] private TextMeshProUGUI goldText;
 
+
     [SerializeField] private GameObject bg;
 
     private void Start()
@@ -83,6 +84,21 @@ public class MenuUIAnimation : MonoBehaviour
     {
         levelText.text = "Level " + StatsManager.Instance.GetCurrentLevel();
         goldText.text = StatsManager.Instance.GetCurrentGolds().ToString();
+        ButtonAnimation(startButton);
+        ButtonAnimation(shaderButton);
+    }
+
+    public void ButtonAnimation(GameObject ob)
+    {
+        float randomScale = Random.Range(0.8f, 1.2f);
+        LeanTween.scale(ob, new Vector3(1.1f, 1.1f, 1.1f), 1f)
+            .setEase(LeanTweenType.easeInOutSine)
+            .setDelay(2)
+            .setOnComplete(() =>
+                LeanTween.scale(ob, new Vector3(0.9f, 0.9f, 0.9f), 1f)
+                .setEase(LeanTweenType.easeInOutSine)
+                .setOnComplete(() => ButtonAnimation(ob))
+            );
     }
 
 }

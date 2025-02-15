@@ -16,8 +16,6 @@ public class GameUIManager : MonoBehaviour, IGameStateListener
     public WinUIAnimation winUIAnimation;
     public LoseUIAnimation loseUIAnimation;
 
-
-
     private void Start()
     {
         if(Instance == null)
@@ -32,6 +30,7 @@ public class GameUIManager : MonoBehaviour, IGameStateListener
             losePanel
         };
     }
+
     private void Show(GameObject panel)
     {
         for(int i =0; i<panels.Length; i++)
@@ -55,4 +54,8 @@ public class GameUIManager : MonoBehaviour, IGameStateListener
                 break;
         }
     }
+
+    
+
+
 }

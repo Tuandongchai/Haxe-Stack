@@ -40,7 +40,7 @@ public class MergeManager : MonoBehaviour
             yield break;
         //Does this cell has neighbors ?
 
-
+       
         List<GridCell> neighborGridCells = GetNeighborGridCells(gridCell); 
 
         if(neighborGridCells.Count <= 0)
@@ -209,6 +209,7 @@ public class MergeManager : MonoBehaviour
         }
         updateCells.Add(gridCell);
 
-        yield return new WaitForSeconds(0.2f +(similarHexagonCount+1) * 0.1f);
+        yield return new WaitForSeconds(0.3f);
+        /*        yield return new WaitForSeconds(0.2f +(similarHexagonCount+1) * 0.1f);*/
     }
 }

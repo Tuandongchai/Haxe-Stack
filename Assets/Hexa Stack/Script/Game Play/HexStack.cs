@@ -45,4 +45,6 @@ public class HexStack : MonoBehaviour
         if (Hexagons.Count <= 0)
             DestroyImmediate(gameObject);
     }
+
+    
 }

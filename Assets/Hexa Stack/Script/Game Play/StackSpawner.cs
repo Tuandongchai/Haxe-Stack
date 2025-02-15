@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngineInternal;
 
 public class StackSpawner : MonoBehaviour
 {
@@ -22,13 +23,15 @@ public class StackSpawner : MonoBehaviour
         Application.targetFrameRate = 60;
 
         StackController.onStackPlaced += StackPlacedCallback;
+        RollTool.clicked += RollStacks;
     }
     private void OnDestroy()
     {
         StackController.onStackPlaced -= StackPlacedCallback;
-        
+        RollTool.clicked -= RollStacks;
     }
 
+    
     private void StackPlacedCallback(GridCell cell)
     {
         stackCounter++;
@@ -45,7 +48,16 @@ public class StackSpawner : MonoBehaviour
     }
     private void GenerateStacks()
     {
+        
         for(int i =0; i<stackPositionsParent.childCount; i++)
+            //vi tri con 
+            GenerateStack(stackPositionsParent.GetChild(i));
+    }
+    private void RollStacks()
+    {
+        if (StatsManager.Instance.GetTool(2) <= 0)
+            return;
+        for (int i = 0; i < stackPositionsParent.childCount; i++)
             //vi tri con 
             GenerateStack(stackPositionsParent.GetChild(i));
     }

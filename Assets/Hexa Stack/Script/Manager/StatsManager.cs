@@ -21,6 +21,11 @@ public class StatsManager : MonoBehaviour
     [Header("Level")]
     [SerializeField] private int currentLevel;
 
+    [Header("Tools")]
+    [SerializeField] private int currentHammer;
+    [SerializeField] private int currentLightning;
+    [SerializeField] private int currentRolls;
+
     private void Awake()
     {
         if (Instance == null)
@@ -31,10 +36,21 @@ public class StatsManager : MonoBehaviour
 
         if (!PlayerPrefs.HasKey("Hearts"))
             PlayerPrefs.SetInt("Hearts", 5);
+
         if (!PlayerPrefs.HasKey("Golds"))
             PlayerPrefs.SetInt("Golds", 100);
+
         if (!PlayerPrefs.HasKey("Level"))
             PlayerPrefs.SetInt("Level", 0);
+
+        if (!PlayerPrefs.HasKey("Hammers"))
+            PlayerPrefs.SetInt("Hammers", 2);
+
+        if (!PlayerPrefs.HasKey("Lightning"))
+            PlayerPrefs.SetInt("Lightning", 2);
+
+        if (!PlayerPrefs.HasKey("Rolls"))
+            PlayerPrefs.SetInt("Rolls", 2);
     }
 
     private void Start()
@@ -45,6 +61,12 @@ public class StatsManager : MonoBehaviour
         currentGolds = PlayerPrefs.GetInt("Golds", currentGolds);
 
         currentLevel = PlayerPrefs.GetInt("Level", currentLevel);
+
+        currentHammer = PlayerPrefs.GetInt("Hammers", currentHammer);
+
+        currentLightning = PlayerPrefs.GetInt("Lightning", currentLightning);
+
+        currentRolls = PlayerPrefs.GetInt("Rolls", currentRolls);
 
         // Ki?m tra th?i gian k? t? l?n cu?i thoát game
         string lastTimeString = PlayerPrefs.GetString("LastPlayTime", "");
@@ -120,6 +142,8 @@ public class StatsManager : MonoBehaviour
     }
     public void UseGold(int golds)
     {
+        if (golds>currentGolds)
+            return;
         currentGolds -= golds;
 
         PlayerPrefs.SetInt("Golds", currentGolds);
@@ -139,6 +163,65 @@ public class StatsManager : MonoBehaviour
         PlayerPrefs.Save();
     }
 
-
+    public int GetTool(int a)
+    {
+        switch (a)
+        {
+            case 0:
+                return PlayerPrefs.GetInt("Hammers");
+            case 1:
+                return PlayerPrefs.GetInt("Lightning");
+            case 2:
+                return PlayerPrefs.GetInt("Rolls");
+            default:
+                return 0;
+        }
+    }
+    public void UseTool(int a)
+    {
+        switch (a)
+        {
+            case 0:
+                currentHammer--;
+                PlayerPrefs.SetInt("Hammers", currentHammer);
+                PlayerPrefs.Save();
+                break;
+            case 1:
+                currentLightning--;
+                PlayerPrefs.SetInt("Lightning", currentLightning);
+                PlayerPrefs.Save();
+                break;
+            case 2:
+                currentRolls--;
+                PlayerPrefs.SetInt("Rolls", currentRolls);
+                PlayerPrefs.Save();
+                break;
+            default:
+                break;
+        }
+    }
+    public void IncreasedTool(int a)
+    {
+        switch (a)
+        {
+            case 0:
+                currentHammer++;
+                PlayerPrefs.SetInt("Hammers", currentHammer);
+                PlayerPrefs.Save();
+                break;
+            case 1:
+                currentLightning++;
+                PlayerPrefs.SetInt("Lightning", currentLightning);
+                PlayerPrefs.Save();
+                break;
+            case 2:
+                currentRolls++;
+                PlayerPrefs.SetInt("Rolls", currentRolls);
+                PlayerPrefs.Save();
+                break;
+            default:
+                break;
+        }
+    }
 
 }

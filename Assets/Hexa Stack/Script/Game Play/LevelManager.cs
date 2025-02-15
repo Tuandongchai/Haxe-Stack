@@ -1,17 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+using UnityEngine.UI;
 public class LevelManager : MonoBehaviour
 {
     public static LevelManager Instance;
 
-    private GameState gameState = GameState.Win;
-
+    [Header("Component")]
     [SerializeField] private GameObject[] level;
     [SerializeField] private int[] pieces;
+    [SerializeField] private Image fill;
+    [SerializeField] private TextMeshProUGUI percentLevel;
 
     public int piecesCount = 0;
     public int piecesRequire;
@@ -26,19 +28,29 @@ public class LevelManager : MonoBehaviour
         else
             Destroy(gameObject);
 
-        
+
     }
 
     private void Start() {
         GenerateLevels();
 
+        NextLevelButton.onClicked += NextLevel;
+    }
+    private void OnDestroy()
+    {
+        NextLevelButton.onClicked -= NextLevel;
     }
     private void Update()
     {
-         Lose();
-
+        UpdateFill();
+        Lose();
         if (piecesCount >= piecesRequire)
             Win();
+    }
+    private void UpdateFill()
+    {
+        fill.fillAmount = (piecesRequire - piecesCount) / 100;
+        percentLevel.text = $"{piecesCount} / {piecesRequire}";
     }
     private void GenerateLevels()
     {
@@ -49,12 +61,21 @@ public class LevelManager : MonoBehaviour
         levelSpawner.transform.SetParent(transform);
 
         piecesRequire = pieces[StatsManager.Instance.GetCurrentLevel()];
-        
+
     }
     public void NextLevel()
     {
+        StartCoroutine(LoadNextLevel()); 
+
+        
+    }
+    IEnumerator LoadNextLevel()
+    {
+        GameUIManager.Instance.winUIAnimation.LoadOut();
+        yield return new WaitForSeconds(0.5f);
         StatsManager.Instance.IncreasedLevel();
         SceneManager.LoadScene(1);
+
     }
     public void Win()
     {
@@ -65,6 +86,8 @@ public class LevelManager : MonoBehaviour
     }
     public void Lose()
     {
+        if (GameState.Lose==GameManager.instance.gameState)
+            return;
         int childCount = levelSpawner.transform.childCount;
 
         for (int i = 0; i < childCount; i++)
@@ -78,6 +101,8 @@ public class LevelManager : MonoBehaviour
     }
     IEnumerator CheckLose(int childCount)
     {
+        if (GameState.Lose == GameManager.instance.gameState)
+            yield break;
         yield return new WaitForSeconds(1f);
 
         for (int i = 0; i < childCount; i++)
@@ -87,9 +112,14 @@ public class LevelManager : MonoBehaviour
                 yield break;
             }
         }
+        Losed();
+    }
+    public void Losed()
+    {
+        if (GameUIManager.Instance.loseUIAnimation.losePanels.active==true)
+            return;
         GameManager.instance.SetGameState(GameState.Lose);
-        if (GameUIManager.Instance.loseUIAnimation.losePanels.active == true)
-            yield break;
         GameUIManager.Instance.loseUIAnimation.LoadIn();
+        StatsManager.Instance.UseHeart();
     }
 }

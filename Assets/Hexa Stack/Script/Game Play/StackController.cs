@@ -23,6 +23,9 @@ public class StackController : MonoBehaviour
     }
     private void ManageControl()
     {
+        if (ToolsManager.Instance.useTool == true)
+            return;
+
         if (Input.GetMouseButtonDown(0))
             ManageMouseDown();
         else if (Input.GetMouseButton(0) && currentStack != null)
@@ -41,7 +44,10 @@ public class StackController : MonoBehaviour
             Debug.Log("We have not detected any hexagon");
             return;
         }
-        currentStack = hit.collider.GetComponent<Hexagon>().HexStack;
+        /*currentStack = hit.collider.GetComponent<Hexagon>().HexStack;*/
+        currentStack = hit.collider.transform.parent.GetComponent<HexStack>();
+        if (currentStack == null)
+            Debug.Log("no null");
         currentStackInitialPos = currentStack.transform.position;
     }
     private void ManageMouseDrag()

@@ -28,7 +28,7 @@ public class HeartsTimeUI : MonoBehaviour
 
     private void Update()
     {
-        if (StatsManager.Instance.GetCurrentHearts() < 5)
+        if (StatsManager.Instance.GetCurrentHearts() <= 0)
         {
             timer -= Time.deltaTime;
             if (timer <= 0)
@@ -39,9 +39,14 @@ public class HeartsTimeUI : MonoBehaviour
             TimeSpan timeLeft = TimeSpan.FromSeconds(timer);
             timerText.text = $"{timeLeft.Minutes:D2}:{timeLeft.Seconds:D2}";
         }
-        else
+        else if (StatsManager.Instance.GetCurrentHearts()>=5)
         {
             timerText.text = "Full";
         }
+        else
+        {
+            timerText.text = "" + StatsManager.Instance.GetCurrentHearts();
+        }
+
     }
 }
