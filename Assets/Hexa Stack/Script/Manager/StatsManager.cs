@@ -123,6 +123,12 @@ public class StatsManager : MonoBehaviour
             PlayerPrefs.Save();
         }
     }
+    public void IncreasedHeart()
+    {
+        currentHearts++;
+        PlayerPrefs.SetInt("Hearts", currentHearts);
+        PlayerPrefs.Save();
+    }
 
     public int GetCurrentHearts()
     {

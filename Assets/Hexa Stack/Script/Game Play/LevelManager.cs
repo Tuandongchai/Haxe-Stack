@@ -19,7 +19,7 @@ public class LevelManager : MonoBehaviour
     public int piecesRequire;
 
 
-    private GameObject levelSpawner;
+    public GameObject levelSpawner;
 
     private void Awake()
     {
@@ -35,10 +35,12 @@ public class LevelManager : MonoBehaviour
         GenerateLevels();
 
         NextLevelButton.onClicked += NextLevel;
+        RetryButton.onClicked += ResetLevel;
     }
     private void OnDestroy()
     {
         NextLevelButton.onClicked -= NextLevel;
+        RetryButton.onClicked -= ResetLevel;
     }
     private void Update()
     {
@@ -65,6 +67,8 @@ public class LevelManager : MonoBehaviour
     }
     public void NextLevel()
     {
+        AudioManager.instance.PlaySoundEffect(7);
+
         StartCoroutine(LoadNextLevel()); 
 
         
@@ -74,6 +78,19 @@ public class LevelManager : MonoBehaviour
         GameUIManager.Instance.winUIAnimation.LoadOut();
         yield return new WaitForSeconds(0.5f);
         StatsManager.Instance.IncreasedLevel();
+        SceneManager.LoadScene(1);
+
+    }
+    public void ResetLevel()
+    {
+        AudioManager.instance.PlaySoundEffect(7);
+        StartCoroutine(LoadLevel());
+    }
+    IEnumerator LoadLevel()
+    {
+        /*GameUIManager.Instance.gameUIAnimation.settingPanel.SetActive(false);*/
+        GameUIManager.Instance.winUIAnimation.LoadOut();
+        yield return new WaitForSeconds(0.5f);
         SceneManager.LoadScene(1);
 
     }

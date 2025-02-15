@@ -11,10 +11,14 @@ public class GameUIManager : MonoBehaviour, IGameStateListener
     [SerializeField] private GameObject gamePanel;
     [SerializeField] private GameObject winPanel;
     [SerializeField] private GameObject losePanel;
+
+    
+
     private GameObject[] panels;
 
     public WinUIAnimation winUIAnimation;
     public LoseUIAnimation loseUIAnimation;
+    public GameUIAnimation gameUIAnimation;
 
     private void Start()
     {
@@ -29,6 +33,7 @@ public class GameUIManager : MonoBehaviour, IGameStateListener
             winPanel,
             losePanel
         };
+        AudioManager.instance.BGSoundOn(2);
     }
 
     private void Show(GameObject panel)
@@ -42,13 +47,16 @@ public class GameUIManager : MonoBehaviour, IGameStateListener
         switch (gameState)
         {
             case GameState.Play:
-                Show(gamePanel); 
+                Show(gamePanel);
+                AudioManager.instance.BGSoundOn(2);
                 break;
             case GameState.Win:
-                Show(winPanel); 
+                Show(winPanel);
+                AudioManager.instance.PlaySoundEffect(8);
                 break;
             case GameState.Lose:
                 Show(losePanel);
+                AudioManager.instance.PlaySoundEffect(9);
                 break;
             default: 
                 break;

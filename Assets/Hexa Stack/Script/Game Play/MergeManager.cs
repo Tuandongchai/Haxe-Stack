@@ -74,11 +74,18 @@ public class MergeManager : MonoBehaviour
         // At this point we have removed the stacks we don't need anymore
         //we have some free grid cell
 
-        MoveHexagons(gridCell, hexagonsToAdd);
-        yield return new WaitForSeconds(0.2f+ (hexagonsToAdd.Count+1) * 0.01f);
+        //
+        
 
+        //
+        MoveHexagons(gridCell, hexagonsToAdd);
+        /*Wait to move*/
+        yield return new WaitForSeconds(0.2f + (hexagonsToAdd.Count + 1) * 0.01f);
+
+        /*yield return new WaitForSeconds(0.2f + (hexagonsToAdd.Count + 1) * 0.1f);*/
         // Is the stack on this cell complete
         // Does it have 10 or more similar hexagons ?
+
         yield return CheckForCompleteStack(gridCell, gridCellTopHexagonColor);
 
     }
@@ -198,18 +205,20 @@ public class MergeManager : MonoBehaviour
             similarHexagons[0].SetParent(null);
             similarHexagons[0].Vanish(delay);
 
+            
             //DestroyImmediate(similarHexagons[0].gameObject);
 
-            delay += 0.01f;
+            delay += 0.05f;
             
             gridCell.Stack.Remove(similarHexagons[0]);
             similarHexagons.RemoveAt(0);
 
+
             LevelManager.Instance.piecesCount += 1;
         }
+        /*yield return new WaitForSeconds(0.2f + (similarHexagonCount + 1) * 0.1f);*/
+        yield return new WaitForSeconds(0.2f + (similarHexagonCount + 1) * 0.06f);
         updateCells.Add(gridCell);
 
-        yield return new WaitForSeconds(0.3f);
-        /*        yield return new WaitForSeconds(0.2f +(similarHexagonCount+1) * 0.1f);*/
     }
 }

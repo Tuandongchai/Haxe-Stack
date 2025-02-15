@@ -12,6 +12,7 @@ public class MenuUIManager : MonoBehaviour, IMenuGameStateListener
 
     private void Start()
     {
+        AudioManager.instance.BGSoundOn(0);
         panels = new GameObject[] { 
             menuPanel,
             shaderPanel,
@@ -25,15 +26,18 @@ public class MenuUIManager : MonoBehaviour, IMenuGameStateListener
         }
 
     }
+    
     public void GameStateChangedCallback(MenuState state)
     {
         switch (state)
         {
             case MenuState.Menu:
                 ShowPanel(menuPanel);
+                AudioManager.instance.BGSoundOn(0);
                 break;
             case MenuState.Shader:
                 ShowPanel(shaderPanel);
+                AudioManager.instance.BGSoundOn(1);
                 break;
             default: 
                 break;

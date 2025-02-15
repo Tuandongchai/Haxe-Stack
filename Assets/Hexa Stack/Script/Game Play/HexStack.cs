@@ -36,7 +36,6 @@ public class HexStack : MonoBehaviour
             //dat xuong k di chuyen 
             hexagon.DisableCollider();
     }
-
     public bool Contains(Hexagon hexagon) =>Hexagons.Contains(hexagon);
     public void Remove(Hexagon hexagon)
     {
@@ -44,7 +43,6 @@ public class HexStack : MonoBehaviour
 
         if (Hexagons.Count <= 0)
             DestroyImmediate(gameObject);
-    }
 
-    
+    }
 }

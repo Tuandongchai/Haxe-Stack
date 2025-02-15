@@ -15,6 +15,7 @@ public class WinUIAnimation : MonoBehaviour
     [SerializeField] private TextMeshProUGUI goldReceived;
     [SerializeField] private TextMeshProUGUI sunReceived;
     [SerializeField] private GameObject coinPanel;
+    
 
 
     [Header("Setting")]
@@ -24,15 +25,17 @@ public class WinUIAnimation : MonoBehaviour
 
     private void Start()
     {
-        CloseWinPanel.onClicked += Close;
+        CloseWinPanelButton.onClicked += Close;
     }
     private void OnDestroy()
     {
-        CloseWinPanel.onClicked -= Close;
+        CloseWinPanelButton.onClicked -= Close;
     }
 
     private void Close()
     {
+        AudioManager.instance.PlaySoundEffect(7);
+
         LoadOut();
         StartCoroutine(ClosePanel());
     }

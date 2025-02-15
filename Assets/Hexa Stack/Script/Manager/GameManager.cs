@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
 
         gameState = GameState.Play;
+       
     }
 
     public void SetGameState(GameState gameState)

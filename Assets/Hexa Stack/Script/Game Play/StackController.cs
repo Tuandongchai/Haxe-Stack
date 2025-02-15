@@ -44,10 +44,10 @@ public class StackController : MonoBehaviour
             Debug.Log("We have not detected any hexagon");
             return;
         }
+        AudioManager.instance.PlaySoundEffect(3);
+
         /*currentStack = hit.collider.GetComponent<Hexagon>().HexStack;*/
         currentStack = hit.collider.transform.parent.GetComponent<HexStack>();
-        if (currentStack == null)
-            Debug.Log("no null");
         currentStackInitialPos = currentStack.transform.position;
     }
     private void ManageMouseDrag()
@@ -77,7 +77,7 @@ public class StackController : MonoBehaviour
         Vector3 currentStackTargetPos = hit.point.With(y:2);
         currentStack.transform.position = Vector3.MoveTowards(currentStack.transform.position, 
             currentStackTargetPos, 
-            Time.deltaTime *30);
+            Time.deltaTime *100);
 
         targetCell = null;
     }
@@ -106,28 +106,41 @@ public class StackController : MonoBehaviour
     {
         if (targetCell == null)
         {
+            Debug.Log(targetCell +" = null");
             currentStack.transform.position = currentStackInitialPos;
             currentStack = null;
+            AudioManager.instance.PlaySoundEffect(4);
             return;
         }
 
         if (targetCell.Stack != null)
         {
+            Debug.Log(targetCell.Stack + " = null");
             currentStack.transform.position = currentStackInitialPos;
             currentStack = null;
+            AudioManager.instance.PlaySoundEffect(4);
             return;
 
         }
+        AudioManager.instance.PlaySoundEffect(4);
+        if(ToolsManager.Instance.moveTool==true)
+            currentStack.transform.parent.GetComponent<GridCell>().AssignStack(null);
         currentStack.transform.position = targetCell.transform.position.With(y: 0.2f);
         currentStack.transform.SetParent(targetCell.transform);
         currentStack.Place();
 
         targetCell.AssignStack(currentStack);
+        
 
         onStackPlaced?.Invoke(targetCell);
 
         targetCell = null;
         currentStack = null;
+        if (ToolsManager.Instance.moveTool == true)
+        {
+            ToolsManager.Instance.EndTool();
+            
+        }
     }
     private Ray GetClickedRay()=> Camera.main.ScreenPointToRay(Input.mousePosition);
 }

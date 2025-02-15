@@ -28,10 +28,15 @@ public class Hexagon : MonoBehaviour
     {
         LeanTween.cancel(gameObject);
 
-        LeanTween.scale(gameObject, Vector3.zero, 0.2f)
+        AudioManager.instance.PlaySoundEffect(1);
+        LeanTween.scale(gameObject, Vector3.zero, 0.5f)
             .setEase(LeanTweenType.easeInBack)
             .setDelay(delay)
-            .setOnComplete(()=>Destroy(gameObject));
+            .setOnComplete(() =>
+            {
+                Destroy(gameObject);
+            });
+
     }
 
     public void MoveToLocal(Vector3 targetLocalPos)
@@ -39,18 +44,19 @@ public class Hexagon : MonoBehaviour
         LeanTween.cancel(gameObject);
 
         float delay = transform.GetSiblingIndex() * 0.01f;
-
         LeanTween.moveLocal(gameObject, targetLocalPos, .2f)
             .setEase(LeanTweenType.easeInOutSine)
             .setDelay(delay);
 
-        Vector3 direction = (targetLocalPos - transform.localPosition).With(y:0).normalized;
+        Vector3 direction = (targetLocalPos - transform.localPosition).With(y: 20).normalized;
         Vector3 rotationAxis = Vector3.Cross(Vector3.up, direction);
 
         LeanTween.rotateAround(gameObject, rotationAxis, 180, .2f)
             .setEase(LeanTweenType.easeInOutSine)
             .setDelay(delay);
 
-
+        AudioManager.instance.PlaySoundEffect(0);
     }
+
+
 }

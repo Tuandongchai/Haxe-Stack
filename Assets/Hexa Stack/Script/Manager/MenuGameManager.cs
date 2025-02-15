@@ -28,6 +28,7 @@ public class MenuGameManager : MonoBehaviour
     //
     public void MenuCallBack()
     {
+        AudioManager.instance.PlaySoundEffect(7);
         StartCoroutine(LoadMenuScene());
     }
     IEnumerator LoadMenuScene()
@@ -41,6 +42,7 @@ public class MenuGameManager : MonoBehaviour
     //
     public void ShaderCallBack()
     {
+        AudioManager.instance.PlaySoundEffect(7);
         StartCoroutine(LoadShaderScene());
     }
 

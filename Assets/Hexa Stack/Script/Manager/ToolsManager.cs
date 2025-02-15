@@ -17,7 +17,7 @@ public class ToolsManager : MonoBehaviour
     [SerializeField] private LayerMask hexagonLayerMask;
 
     public bool useTool=false;
-    public bool moveTool=true;
+    public bool moveTool=false;
     private List<GameObject> listObInGrid;
     private List<GameObject> listObInSpawner;
 
@@ -30,15 +30,16 @@ public class ToolsManager : MonoBehaviour
         else
             Destroy(gameObject);
 
+        moveTool = false;
         RollTool.clicked += RollTools;
         HammerButton.onClicked += HammerTool;
-        MoveButton.clicked += MoveTool;
+        MoveButton.clicked += SwapTool;
     }
     private void OnDestroy()
     {
         RollTool.clicked -= RollTools;
         HammerButton.onClicked -= HammerTool;
-        MoveButton.clicked -= MoveTool;
+        MoveButton.clicked -= SwapTool;
     }
     private void Update()
     {
@@ -61,7 +62,10 @@ public class ToolsManager : MonoBehaviour
                 return;
             StatsManager.Instance.UseGold(500);
             StatsManager.Instance.IncreasedTool(2);
-           
+            GameManager.instance.gameUIAnimation.Show();
+
+            AudioManager.instance.PlaySoundEffect(10);
+
         }
         else
         {
@@ -75,6 +79,8 @@ public class ToolsManager : MonoBehaviour
                 }
             }
             StatsManager.Instance.UseTool(2);
+
+            AudioManager.instance.PlaySoundEffect(11);
 
         }
         toolUI.Show();
@@ -90,13 +96,16 @@ public class ToolsManager : MonoBehaviour
                 return;
             StatsManager.Instance.UseGold(1000);
             StatsManager.Instance.IncreasedTool(0);
+            GameManager.instance.gameUIAnimation.Show();
+
+            AudioManager.instance.PlaySoundEffect(10);
         }
         else
         {
 
             useTool = true;
 
-            GameManager.instance.gameUIAnimation.UseTool();
+            GameManager.instance.gameUIAnimation.UseTool(0);
 
             listObInGrid = new List<GameObject> { };
             AbleCollider(grid, listObInGrid);
@@ -105,6 +114,7 @@ public class ToolsManager : MonoBehaviour
             DisableCollider(hexSpawner, listObInSpawner);
 
             StatsManager.Instance.UseTool(0);
+            AudioManager.instance.PlaySoundEffect(11);
 
         }
         toolUI.Show();
@@ -155,13 +165,13 @@ public class ToolsManager : MonoBehaviour
         listObInSpawner = new List<GameObject> { };
         AbleCollider(hexSpawner, listObInSpawner);
 
-        GameManager.instance.gameUIAnimation.NoUseTool();
+        GameManager.instance.gameUIAnimation.NoUseTool(0);
         useTool = false;
     }
     private Ray GetClickedRay() => Camera.main.ScreenPointToRay(Input.mousePosition);
 
-    //MoveTool
-    private void MoveTool()
+    //SwapTool
+    private void SwapTool()
     {
         int currentMoves = StatsManager.Instance.GetTool(1);
         if (currentMoves <= 0)
@@ -170,13 +180,16 @@ public class ToolsManager : MonoBehaviour
                 return;
             StatsManager.Instance.UseGold(1000);
             StatsManager.Instance.IncreasedTool(1);
+            GameManager.instance.gameUIAnimation.Show();
+
+            AudioManager.instance.PlaySoundEffect(10);
         }
         else
         {
 
             moveTool = true;
 
-            GameManager.instance.gameUIAnimation.UseTool();
+            GameManager.instance.gameUIAnimation.UseTool(1);
 
             listObInGrid = new List<GameObject> { };
             AbleCollider(grid, listObInGrid);
@@ -189,6 +202,20 @@ public class ToolsManager : MonoBehaviour
         }
         toolUI.Show();
         
+    }
+    public void EndTool()
+    {
+        moveTool = false;
+
+        listObInGrid = new List<GameObject> { };
+        DisableCollider(grid, listObInGrid);
+
+        listObInSpawner = new List<GameObject> { };
+        AbleCollider(hexSpawner, listObInSpawner);
+
+        GameManager.instance.gameUIAnimation.NoUseTool(1);
+
+        AudioManager.instance.PlaySoundEffect(11);
     }
 
 }

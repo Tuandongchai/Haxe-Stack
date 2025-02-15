@@ -9,6 +9,8 @@ public class ToolsUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI hammerText;
     [SerializeField] private TextMeshProUGUI lightningText;
     [SerializeField] private TextMeshProUGUI rollText;
+
+
     private TextMeshProUGUI[] textArray;
 
     private void Start()
