@@ -35,8 +35,10 @@ public class GameUIAnimation : MonoBehaviour
     }
     public void Show()
     {
-        levelText.text = "Level " + StatsManager.Instance.GetCurrentLevel();
+        levelText.text = "Level " + StatsManager.Instance.GetSelectLevel();
         goldText.text = StatsManager.Instance.GetCurrentGolds().ToString();
+
+       
     }
     public void UseTool(int i)
     {

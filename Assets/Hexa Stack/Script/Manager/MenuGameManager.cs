@@ -16,6 +16,7 @@ public class MenuGameManager : MonoBehaviour
     public MenuState menuState;
     public MenuUIAnimation menuUIAnimation;
     public ShaderUIAnimation shaderUIAnimation;
+    public LevelSelection levelSelectionUI;
 
     private void Start()
     {
@@ -23,7 +24,11 @@ public class MenuGameManager : MonoBehaviour
             instance = this;
         else
             Destroy(gameObject);
-        
+        LevelButton.onClicked += SelectLevel;
+    }
+    private void OnDestroy()
+    {
+        LevelButton.onClicked -= SelectLevel;
     }
     //
     public void MenuCallBack()
@@ -34,7 +39,7 @@ public class MenuGameManager : MonoBehaviour
     IEnumerator LoadMenuScene()
     {
         shaderUIAnimation.LoadOut();
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.4f);
         SetGameState(MenuState.Menu);
         yield return new WaitForSeconds(0.1f);
         menuUIAnimation.LoadIn();
@@ -62,8 +67,25 @@ public class MenuGameManager : MonoBehaviour
     }
     IEnumerator LoadGameScene()
     {
-        PlayerPrefs.SetInt("Level", 0);
+        StatsManager.Instance.SetSelectLevel(StatsManager.Instance.GetCurrentLevel());
+        /*PlayerPrefs.SetInt("Level", 0);*/
         menuUIAnimation.LoadGamePlayScence();
+        yield return new WaitForSeconds(1.5f);
+        SceneManager.LoadScene(1);
+    }
+    public void SelectLevel(int lv)
+    {
+        if (lv >StatsManager.Instance.GetCurrentLevel())
+            return;
+        levelSelectionUI.LoadOut();
+        StartCoroutine(LoadLoadSelectLevelGameScene(lv));
+    }
+    IEnumerator LoadLoadSelectLevelGameScene(int lv)
+    {
+        StatsManager.Instance.SetSelectLevel(lv);
+        /*PlayerPrefs.SetInt("Level", 0);*/
+        menuUIAnimation.LoadGamePlayScence();
+        
         yield return new WaitForSeconds(1.5f);
         SceneManager.LoadScene(1);
     }

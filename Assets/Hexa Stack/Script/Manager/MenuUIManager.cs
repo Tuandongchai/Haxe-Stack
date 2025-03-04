@@ -1,21 +1,22 @@
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class MenuUIManager : MonoBehaviour, IMenuGameStateListener
 {
-    [Header(" Settings ")]
-    [SerializeField] private GameObject menuPanel;
-    [SerializeField] private GameObject shaderPanel;
+    [Header(" Element ")]
+    [SerializeField] private GameObject menuPanel, shaderPanel;
     private GameObject[] panels;
 
     private void Start()
     {
+        
         AudioManager.instance.BGSoundOn(0);
         panels = new GameObject[] { 
             menuPanel,
-            shaderPanel,
+            shaderPanel
         };
     }
     private void ShowPanel(GameObject panel)

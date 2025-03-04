@@ -11,21 +11,22 @@ public class BuildButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     private Button button;
     private bool isPressed;
+
     [Header("Action")]
-    public static Action onHoldStart;
-/*    public static Action onHoldEnd;*/
+    public static Action<int> onHoldStart;
+
+    public static Action<int> onHoldEnd;
 
     private void Awake()
     {
         button = GetComponent<Button>();
-
-        
     }
+   
     private void Update()
     {
         if (isPressed)
         {
-            onHoldStart?.Invoke();
+            onHoldStart?.Invoke(GameData.instance.GetObjectFill());
         }
     }
     public void OnPointerDown(PointerEventData eventData)
@@ -36,6 +37,7 @@ public class BuildButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     public void OnPointerUp(PointerEventData eventData)
     {
         isPressed = false;
-        /*onHoldEnd?.Invoke();*/
+        onHoldEnd?.Invoke(GameData.instance.GetObjectFill());
+  
     }
 }

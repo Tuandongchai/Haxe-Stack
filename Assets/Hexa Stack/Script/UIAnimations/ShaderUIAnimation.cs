@@ -1,6 +1,10 @@
+using Microsoft.Unity.VisualStudio.Editor;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class ShaderUIAnimation : MonoBehaviour
 {
@@ -13,14 +17,47 @@ public class ShaderUIAnimation : MonoBehaviour
     [SerializeField] private GameObject buildingMasterials;
     [SerializeField] private GameObject buildButton;
 
+    [SerializeField] private TextMeshProUGUI percentText;
+    [SerializeField] private UnityEngine.UI.Image percentFill;
+    [SerializeField] private TextMeshProUGUI sunsText;
+    private float filldrawed=0;
+
     private GameObject[] buttons;
 
     private void Start()
     {
+        GameData fillElement = GameData.instance;
+        Show(fillElement.GetFill(fillElement.GetObjectFill()), fillElement.GetObjectFill());
         buttons = new GameObject[]
         {
             closeButton, nameCity, percentGift, leftNext, rightNext, buildingMasterials, buildButton
         };
+        for (int i = 0; i < buttons.Length; i++)
+        {
+            buttons[i].transform.localScale = Vector3.zero;
+        }
+    }
+
+    public void Show(float x,int count)
+    {
+        sunsText.text = ((int)StatsManager.Instance.GetCurrentSuns()).ToString();
+        switch (count){
+            case 0:
+                filldrawed = x;
+                break;
+            case 1:
+                filldrawed = 1+x;
+                break;
+            case 2:
+                filldrawed = 2+x;
+                break;
+            case 3:
+                filldrawed = 3+x;
+                break;
+            default: break;
+        }
+        percentText.text = ((int)(filldrawed/ (4f) * 100))+"%";
+        percentFill.fillAmount =((4f-filldrawed) / 4f);
     }
     public void LoadIn()
     {

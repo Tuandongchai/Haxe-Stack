@@ -61,7 +61,7 @@ public class ToolsManager : MonoBehaviour
             if (StatsManager.Instance.GetCurrentGolds() < 500)
                 return;
             StatsManager.Instance.UseGold(500);
-            StatsManager.Instance.IncreasedTool(2);
+            StatsManager.Instance.IncreasedTool(2,1);
             GameManager.instance.gameUIAnimation.Show();
 
             AudioManager.instance.PlaySoundEffect(10);
@@ -95,7 +95,7 @@ public class ToolsManager : MonoBehaviour
             if (StatsManager.Instance.GetCurrentGolds() < 1000)
                 return;
             StatsManager.Instance.UseGold(1000);
-            StatsManager.Instance.IncreasedTool(0);
+            StatsManager.Instance.IncreasedTool(0, 1);
             GameManager.instance.gameUIAnimation.Show();
 
             AudioManager.instance.PlaySoundEffect(10);
@@ -179,7 +179,7 @@ public class ToolsManager : MonoBehaviour
             if (StatsManager.Instance.GetCurrentGolds() < 1000)
                 return;
             StatsManager.Instance.UseGold(1000);
-            StatsManager.Instance.IncreasedTool(1);
+            StatsManager.Instance.IncreasedTool(1,1);
             GameManager.instance.gameUIAnimation.Show();
 
             AudioManager.instance.PlaySoundEffect(10);

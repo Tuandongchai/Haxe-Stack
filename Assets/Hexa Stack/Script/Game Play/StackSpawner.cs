@@ -34,6 +34,8 @@ public class StackSpawner : MonoBehaviour
     
     private void StackPlacedCallback(GridCell cell)
     {
+        if (ToolsManager.Instance.moveTool == true || ToolsManager.Instance.useTool == true)
+            return;
         stackCounter++;
         if(stackCounter >= 3)
         {
@@ -46,6 +48,8 @@ public class StackSpawner : MonoBehaviour
     {
         GenerateStacks();
     }
+
+
     private void GenerateStacks()
     {
         
@@ -57,6 +61,7 @@ public class StackSpawner : MonoBehaviour
     {
         if (StatsManager.Instance.GetTool(2) <= 0)
             return;
+
         for (int i = 0; i < stackPositionsParent.childCount; i++)
             //vi tri con 
             GenerateStack(stackPositionsParent.GetChild(i));
@@ -64,8 +69,8 @@ public class StackSpawner : MonoBehaviour
 
     private void GenerateStack(Transform parent)
     {
-        //tao ra hexagonStackPrefab
-        HexStack hexStack = Instantiate(hexagonStackPrefab, parent.position, Quaternion.identity, parent);
+        //sinh ra hexagonStackPrefab
+        HexStack hexStack = Instantiate(hexagonStackPrefab, parent.position, parent.localRotation, parent);
         hexStack.name = $"Stack {parent.GetSiblingIndex()}";
 
         int amount = Random.Range(minMaxhexCount.x,minMaxhexCount.y);
@@ -73,13 +78,13 @@ public class StackSpawner : MonoBehaviour
         int firstColorHexagonCount = Random.Range(0, amount);
 
         Color[] colorArray = GetRandomColors();
-        //tao ra hexagonPrefab
+        //sinh ra hexagonPrefab
         for(int i =0; i<amount; i++)
         {
             Vector3 hexagonLocalPos = Vector3.up * i * .2f;
             Vector3 spawnPosition = hexStack.transform.TransformPoint(hexagonLocalPos);
 
-            Hexagon hexagonInstance = Instantiate(hexagonPrefab, spawnPosition, Quaternion.identity, hexStack.transform);
+            Hexagon hexagonInstance = Instantiate(hexagonPrefab, spawnPosition, parent.localRotation, hexStack.transform);
             hexagonInstance.Color = i<firstColorHexagonCount ? colorArray[0]: colorArray[1];
 
             hexagonInstance.Configure(hexStack);

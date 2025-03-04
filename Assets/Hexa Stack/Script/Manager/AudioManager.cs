@@ -20,8 +20,6 @@ public class AudioManager : MonoBehaviour
     [Header("Sound Clip Effect")]
     [SerializeField] private GameObject soundEffectSource;
 
-
-
     private void Awake()
     {
         if (instance == null)
@@ -31,7 +29,7 @@ public class AudioManager : MonoBehaviour
     }
     private void Start()
     {
-        if (PlayerPrefs.HasKey("VolumeMusic"))
+        if (PlayerPrefs.HasKey("Volume"))
         {
             float savedVolume = PlayerPrefs.GetFloat("Volume");
             foreach (AudioSource source in bgSources)
@@ -94,14 +92,14 @@ public class AudioManager : MonoBehaviour
     }
 
     /*public void PlaySoundEffect(int i) => sfxSources[i].PlayOneShot(sfxSources[i].clip);*/
-    public void PlaySoundEffect(int i) 
+    public void PlaySoundEffect(int i)
     {
         AudioSource newSource = soundEffectSource.AddComponent<AudioSource>();
         newSource.clip = sfxSources[i].clip;
         newSource.Play();
 
         Destroy(newSource, 0.3f);
-    } 
+    }
     public void StopSoundEffect(int i) => sfxSources[i].Stop(); 
 
 

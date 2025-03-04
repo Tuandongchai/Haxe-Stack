@@ -18,6 +18,9 @@ public class StatsManager : MonoBehaviour
     [Header("Gold")]
     [SerializeField] private int currentGolds;
 
+    [Header ("Sun")]
+    [SerializeField] private float currentSuns;
+
     [Header("Level")]
     [SerializeField] private int currentLevel;
 
@@ -40,6 +43,9 @@ public class StatsManager : MonoBehaviour
         if (!PlayerPrefs.HasKey("Golds"))
             PlayerPrefs.SetInt("Golds", 100);
 
+        if (!PlayerPrefs.HasKey("Suns"))
+            PlayerPrefs.SetFloat("Suns", 30);
+
         if (!PlayerPrefs.HasKey("Level"))
             PlayerPrefs.SetInt("Level", 0);
 
@@ -51,6 +57,9 @@ public class StatsManager : MonoBehaviour
 
         if (!PlayerPrefs.HasKey("Rolls"))
             PlayerPrefs.SetInt("Rolls", 2);
+
+        if (!PlayerPrefs.HasKey("SelectLevel"))
+            PlayerPrefs.SetInt("SelectLevel", 0);
     }
 
     private void Start()
@@ -59,6 +68,8 @@ public class StatsManager : MonoBehaviour
         currentHearts = PlayerPrefs.GetInt("Hearts", maxHearts);
 
         currentGolds = PlayerPrefs.GetInt("Golds", currentGolds);
+
+        currentSuns = PlayerPrefs.GetFloat("Suns", currentSuns);
 
         currentLevel = PlayerPrefs.GetInt("Level", currentLevel);
 
@@ -123,9 +134,11 @@ public class StatsManager : MonoBehaviour
             PlayerPrefs.Save();
         }
     }
-    public void IncreasedHeart()
+    public void IncreasedHeart(int a)
     {
-        currentHearts++;
+        currentHearts+=a;
+        if(currentHearts>5)
+            currentHearts=5;
         PlayerPrefs.SetInt("Hearts", currentHearts);
         PlayerPrefs.Save();
     }
@@ -155,20 +168,54 @@ public class StatsManager : MonoBehaviour
         PlayerPrefs.SetInt("Golds", currentGolds);
         PlayerPrefs.Save();
     }
-
-    public int GetCurrentLevel()
+    //
+    public float GetCurrentSuns()
     {
-        return currentLevel;
+        return currentSuns;
     }
+
+    public void IncreasedSuns(float sun)
+    {
+        currentSuns += sun;
+
+        PlayerPrefs.SetFloat("Suns", currentSuns);
+        PlayerPrefs.Save();
+    }
+    public void UseSuns(float sun)
+    {
+        if (sun > currentSuns)
+            return;
+        currentSuns -= sun;
+
+        PlayerPrefs.SetFloat("Suns", currentSuns);
+        PlayerPrefs.Save();
+    }
+    //
+    public void SetCurrentLevel(int lv) => PlayerPrefs.SetInt("Level", lv);
+    public int GetCurrentLevel()=> PlayerPrefs.GetInt("Level");
 
     public void IncreasedLevel()
     {
         currentLevel ++;
-
+        
         PlayerPrefs.SetInt("Level", currentLevel);
         PlayerPrefs.Save();
     }
+    public void SetSelectLevel(int lv)
+    {
+        PlayerPrefs.SetInt("SelectLevel", lv);
+        PlayerPrefs.Save();
+    }
+    public int GetSelectLevel() => PlayerPrefs.GetInt("SelectLevel");
 
+    public void IncreasedSelectLevel()
+    {
+        PlayerPrefs.SetInt("SelectLevel", GetSelectLevel()+1);
+        if(GetSelectLevel()>=GetCurrentLevel())
+            SetCurrentLevel(GetSelectLevel());
+        PlayerPrefs.Save();
+    }
+        
     public int GetTool(int a)
     {
         switch (a)
@@ -206,22 +253,22 @@ public class StatsManager : MonoBehaviour
                 break;
         }
     }
-    public void IncreasedTool(int a)
+    public void IncreasedTool(int a, int b)
     {
         switch (a)
         {
             case 0:
-                currentHammer++;
+                currentHammer+=b;
                 PlayerPrefs.SetInt("Hammers", currentHammer);
                 PlayerPrefs.Save();
                 break;
             case 1:
-                currentLightning++;
+                currentLightning+=b;
                 PlayerPrefs.SetInt("Lightning", currentLightning);
                 PlayerPrefs.Save();
                 break;
             case 2:
-                currentRolls++;
+                currentRolls+=b;
                 PlayerPrefs.SetInt("Rolls", currentRolls);
                 PlayerPrefs.Save();
                 break;

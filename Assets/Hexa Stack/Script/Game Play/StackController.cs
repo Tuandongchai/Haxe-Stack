@@ -23,6 +23,9 @@ public class StackController : MonoBehaviour
     }
     private void ManageControl()
     {
+        if (GameManager.instance.gameState != GameState.Play)
+            return;
+        
         if (ToolsManager.Instance.useTool == true)
             return;
 
@@ -61,9 +64,6 @@ public class StackController : MonoBehaviour
             DraggeingAboveGridCell(hit);
     }
 
-    
-
-
     private void DraggingAboveGround()
     {
         RaycastHit hit;
@@ -101,6 +101,8 @@ public class StackController : MonoBehaviour
         currentStack.transform.position = Vector3.MoveTowards(currentStack.transform.position,
             currentStackTargetPos,
             Time.deltaTime * 30);
+        /*Color color = gridCell.GetComponent<Material>().color;
+        color.*/
     }
     private void ManageMouseUp()
     {

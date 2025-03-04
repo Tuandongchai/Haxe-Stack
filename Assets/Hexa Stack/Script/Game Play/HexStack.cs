@@ -21,6 +21,7 @@ public class HexStack : MonoBehaviour
 
         Hexagons.Add(hexagon);
         hexagon.SetParent(transform);
+        hexagon.transform.localRotation= transform.localRotation;
     }
 
     public Color GetTopHexagonColor()

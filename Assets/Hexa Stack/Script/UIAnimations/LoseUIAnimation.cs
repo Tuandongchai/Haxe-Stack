@@ -39,7 +39,7 @@ public class LoseUIAnimation : MonoBehaviour
     {
         collectPiece.text = ""+LevelManager.Instance.piecesCount;
         goldText.text = ""+StatsManager.Instance.GetCurrentGolds();
-        levelText.text ="Level "+ StatsManager.Instance.GetCurrentLevel();
+        levelText.text ="Level "+ StatsManager.Instance.GetSelectLevel();
         losePanels.transform.localPosition= new Vector3 (0, -2191, 0);
 
         LeanTween.moveLocalY(losePanels, 0, 0.25f).setEase(LeanTweenType.easeInBack);
@@ -61,9 +61,9 @@ public class LoseUIAnimation : MonoBehaviour
         GetGridContainHexStack(parent, listHexStack);
 
         RemoveHexStack(listHexStack, 3);
-        StatsManager.Instance.IncreasedHeart();
+        StatsManager.Instance.IncreasedHeart(1);
         GameManager.instance.SetGameState(GameState.Play);
-
+        Invoke("()=>GameManager.instance.SetGameState(GameState.Play)",0.01f);
 
     }
     //return grid contain hexstack

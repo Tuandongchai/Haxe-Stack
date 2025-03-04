@@ -14,6 +14,7 @@ public class MenuUIAnimation : MonoBehaviour
     [SerializeField] private GameObject settingButton;
     [SerializeField] private GameObject gold;
     [SerializeField] private GameObject heath;
+    [SerializeField] private GameObject menu;
 
     [Header("Settings")]
     [SerializeField] private TextMeshProUGUI levelText;
@@ -37,6 +38,7 @@ public class MenuUIAnimation : MonoBehaviour
     {
         LeanTween.moveY(startButton,-1396f, duration).setEase(LeanTweenType.easeInBack);
         LeanTween.moveY(shaderButton, -1396f, duration).setEase(LeanTweenType.easeInBack);
+        LeanTween.moveY(menu, -1396f, duration).setEase(LeanTweenType.easeInBack);
 
         GameObject[] a = new GameObject[] {avata, settingButton, gold, heath};
         foreach (GameObject go in a)
@@ -60,8 +62,9 @@ public class MenuUIAnimation : MonoBehaviour
     {
         LeanTween.moveLocalY(startButton, -603, duration).setEase(LeanTweenType.easeInBack);
         LeanTween.moveLocalY(shaderButton, -219f, duration).setEase(LeanTweenType.easeInBack);
+        LeanTween.moveLocalY(menu, -1013.602f, duration).setEase(LeanTweenType.easeInBack);
 
-        GameObject[] a = new GameObject[] { avata, settingButton, gold, heath };
+        GameObject[] a = new GameObject[] { avata, settingButton, gold, heath};
         foreach (GameObject go in a)
         {
             LeanTween.moveLocalY(go, 916, duration).setEase(LeanTweenType.easeInBack);
@@ -72,8 +75,9 @@ public class MenuUIAnimation : MonoBehaviour
     {
         LeanTween.moveLocalY(startButton, -1396f, duration).setEase(LeanTweenType.easeInBack);
         LeanTween.moveLocalY(shaderButton, -1396f, duration).setEase(LeanTweenType.easeInBack);
+        LeanTween.moveY(menu, -1396f, duration).setEase(LeanTweenType.easeInBack);
 
-        GameObject[] a = new GameObject[] { avata, settingButton, gold, heath };
+        GameObject[] a = new GameObject[] { avata, settingButton, gold, heath};
         foreach (GameObject go in a)
         {
             LeanTween.moveLocalY(go, 1400, duration).setEase(LeanTweenType.easeInBack);

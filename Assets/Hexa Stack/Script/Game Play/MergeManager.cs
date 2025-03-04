@@ -163,6 +163,7 @@ public class MergeManager : MonoBehaviour
                 
             }
         }
+        
     }
     private void MoveHexagons(GridCell gridCell, List<Hexagon> hexagonsToAdd)
     {
@@ -215,6 +216,7 @@ public class MergeManager : MonoBehaviour
 
 
             LevelManager.Instance.piecesCount += 1;
+            LevelManager.Instance.UpdateFill();
         }
         /*yield return new WaitForSeconds(0.2f + (similarHexagonCount + 1) * 0.1f);*/
         yield return new WaitForSeconds(0.2f + (similarHexagonCount + 1) * 0.06f);

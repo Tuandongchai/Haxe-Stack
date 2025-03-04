@@ -21,6 +21,8 @@ public class LevelManager : MonoBehaviour
 
     public GameObject levelSpawner;
 
+    private int currentLv;
+
     private void Awake()
     {
         if (Instance == null)
@@ -28,14 +30,19 @@ public class LevelManager : MonoBehaviour
         else
             Destroy(gameObject);
 
-
     }
 
     private void Start() {
-        GenerateLevels();
+
+        currentLv = StatsManager.Instance.GetSelectLevel();
+        GenerateLevels(currentLv);
+
+        piecesRequire = pieces[currentLv];
+        UpdateFill();
 
         NextLevelButton.onClicked += NextLevel;
         RetryButton.onClicked += ResetLevel;
+        
     }
     private void OnDestroy()
     {
@@ -44,25 +51,28 @@ public class LevelManager : MonoBehaviour
     }
     private void Update()
     {
-        UpdateFill();
+        /*UpdateFill();*/
         Lose();
         if (piecesCount >= piecesRequire)
-            Win();
+            StartCoroutine(Win());
     }
-    private void UpdateFill()
+    public void UpdateFill()
     {
-        fill.fillAmount = (piecesRequire - piecesCount) / 100;
+
+        fill.fillAmount = (piecesRequire - piecesCount) / (float)piecesRequire;
+
+        
         percentLevel.text = $"{piecesCount} / {piecesRequire}";
     }
-    private void GenerateLevels()
+    private void GenerateLevels(int lv)
     {
-        GameObject currentLevel = level[StatsManager.Instance.GetCurrentLevel()];
+        GameObject currentLevel = level[lv];
 
         Vector3 position = transform.position;
         levelSpawner = Instantiate(currentLevel, position, Quaternion.identity);
         levelSpawner.transform.SetParent(transform);
 
-        piecesRequire = pieces[StatsManager.Instance.GetCurrentLevel()];
+        
 
     }
     public void NextLevel()
@@ -77,10 +87,13 @@ public class LevelManager : MonoBehaviour
     {
         GameUIManager.Instance.winUIAnimation.LoadOut();
         yield return new WaitForSeconds(0.5f);
-        StatsManager.Instance.IncreasedLevel();
+        StatsManager.Instance.IncreasedSelectLevel();
         SceneManager.LoadScene(1);
 
     }
+   
+
+
     public void ResetLevel()
     {
         AudioManager.instance.PlaySoundEffect(7);
@@ -94,11 +107,13 @@ public class LevelManager : MonoBehaviour
         SceneManager.LoadScene(1);
 
     }
-    public void Win()
+    IEnumerator Win()
     {
+        yield return new WaitForSeconds(0.5f);
         if (GameUIManager.Instance.winUIAnimation.winPanel.active == true)
-            return;
+            yield break;
         GameManager.instance.SetGameState(GameState.Win);
+        StatsManager.Instance.IncreasedSuns(piecesRequire);
         GameUIManager.Instance.winUIAnimation.LoadIn();
     }
     public void Lose()

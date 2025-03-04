@@ -19,7 +19,7 @@ public class WinUIAnimation : MonoBehaviour
 
 
     [Header("Setting")]
-    [SerializeField] private Transform coinParent;
+    [SerializeField] private GameObject coinParent;
     [SerializeField] private GameObject coinEnd;
     float duration = 0.5f;
 
@@ -42,13 +42,13 @@ public class WinUIAnimation : MonoBehaviour
     IEnumerator ClosePanel()
     {
         yield return new WaitForSeconds(0.4f);
-        StatsManager.Instance.IncreasedLevel();
+        StatsManager.Instance.IncreasedSelectLevel();
         SceneManager.LoadScene(0);
 
     }
     public void LoadIn()
     {
-        levelText.text = "Level "+ StatsManager.Instance.GetCurrentLevel();
+        levelText.text = "Level "+ StatsManager.Instance.GetSelectLevel();
         goldText.text = "" + StatsManager.Instance.GetCurrentGolds();
         piecesText.text = LevelManager.Instance.piecesRequire.ToString();
         goldReceived.text = "100";
@@ -78,11 +78,10 @@ public class WinUIAnimation : MonoBehaviour
         {
             coins[i] = Instantiate(
                 coinPrefab,
-                coinParent.position + new Vector3(Random.Range(-70, 70), Random.Range(-70, 70), 0),
+                coinParent.transform.position + new Vector3(Random.Range(-5, 5), Random.Range(-5, 5), 0),
                 Quaternion.Euler(0, 0, Random.Range(-180, 180))
             );
-            coins[i].transform.SetParent(coinParent);
-
+            coins[i].transform.SetParent(coinParent.transform);
         }
 
         for (int i = 0; i < coinCount; i++)
