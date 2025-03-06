@@ -70,6 +70,12 @@ public class ShopUI : MonoBehaviour
                     StatsManager.Instance.IncreasedTool(1, 1);
                     StatsManager.Instance.IncreasedTool(2, 1);
                     StatsManager.Instance.IncreasedHeart(1);
+                    Dictionary<string, int> dict = new Dictionary<string, int> {
+                        {"hammers",1 },
+                        {"swaps",1 },
+                        {"rolls",1 }
+                    };
+                    RewardPopup.instance.ShowReward(dict);
                 }
                 else
                     ShowText();
@@ -82,6 +88,12 @@ public class ShopUI : MonoBehaviour
                     StatsManager.Instance.IncreasedTool(1, 3);
                     StatsManager.Instance.IncreasedTool(2, 3);
                     StatsManager.Instance.IncreasedHeart(3);
+                    Dictionary<string, int> dict = new Dictionary<string, int> {
+                        {"hammers",3 },
+                        {"swaps",3 },
+                        {"rolls",3 }
+                    };
+                    RewardPopup.instance.ShowReward(dict);
                 }
                 else
                     ShowText();
@@ -94,6 +106,12 @@ public class ShopUI : MonoBehaviour
                     StatsManager.Instance.IncreasedTool(1, 5);
                     StatsManager.Instance.IncreasedTool(2, 5);
                     StatsManager.Instance.IncreasedHeart(5);
+                    Dictionary<string, int> dict = new Dictionary<string, int> {
+                        {"hammers",5 },
+                        {"swaps",5 },
+                        {"rolls",5 }
+                    };
+                    RewardPopup.instance.ShowReward(dict);
                 }
                 else
                     ShowText();

@@ -46,7 +46,9 @@ public class GameData : MonoBehaviour
                 { "createdDay", ""},
                 { "currentDay", ""},
                 {"day", 1 },
-                {"attendanceDaily",new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}}
+                {"newUserDay", 1},
+                {"attendanceDaily",new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}},
+                {"attendanceNewUser",new int[]{0,0,0,0,0,0,0}}
             };
         }
 
@@ -138,5 +140,22 @@ public class GameData : MonoBehaviour
     public int GetDay()
     {
         return int.Parse(data["day"].ToString());
+    }
+    public int[] GetNUDayArray()
+    {
+        Debug.Log(data["attendanceNewUser"].GetType());
+        int[] dayArray = ((JArray)data["attendanceNewUser"]).ToObject<int[]>();
+        Debug.Log($"lay: {string.Join(", ", dayArray)}");
+        return dayArray;
+    }
+    public void SetNUDayArray(int[] newArray)
+    {
+        Debug.Log($"luu: {string.Join(", ", newArray)}");
+        data["attendanceNewUser"] = JArray.FromObject(newArray);
+        SaveData(data);
+    }
+    public int GetNUDay()
+    {
+        return int.Parse(data["newUserDay"].ToString());
     }
 }
