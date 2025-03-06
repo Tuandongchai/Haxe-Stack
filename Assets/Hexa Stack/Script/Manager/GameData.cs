@@ -108,6 +108,11 @@ public class GameData : MonoBehaviour
         return listFill[i];
 
     }
+    public string GetName()
+    {
+        Dictionary<string, object> data = LoadData();
+        return data["playerName"].ToString();
+    }
 
     public int GetObjectFill()
     {

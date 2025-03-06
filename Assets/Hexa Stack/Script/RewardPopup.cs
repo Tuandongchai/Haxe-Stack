@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class RewardPopup : MonoBehaviour
 {
     public static RewardPopup instance;
-    [SerializeField] private GameObject rewardPrefab, rewardPanel, header, footer;
+    [SerializeField] private GameObject rewardPrefab, rewardPanel, header, footer, background;
     [SerializeField] private Sprite goldSprite, hammerSprite, swapSprite, rollSprite;
     [SerializeField] private GoldAnimation goldAnimaiton;
     private bool hasGold = false;
@@ -29,6 +29,7 @@ public class RewardPopup : MonoBehaviour
             {"swaps", swapSprite },
             {"rolls",rollSprite }
         };
+        
     }
     private void Start()
     {
@@ -43,6 +44,10 @@ public class RewardPopup : MonoBehaviour
     public void ShowReward(Dictionary<string, int> rewards)
     {
         rewardPanel.SetActive(true);
+        Color color = background.GetComponent<Image>().color;
+        color.a = 0.7f;
+        background.GetComponent<Image>().color=color;
+
         SetScaleToZero(header);
         SetScaleToZero(footer);
         LeanTweanScale(rewardPanel, 0.2f, Vector3.one);
@@ -71,22 +76,22 @@ public class RewardPopup : MonoBehaviour
                 increateGold = rewards.ElementAt(i).Value;
                 Debug.Log(hasGold);
             }
-            Debug.Log("check" + hasGold);
         }
 
     }
     public void HideReward()
     {
-        SetScaleToOne(rewardPanel);    
+        SetScaleToOne(rewardPanel);
+        Color color = background.GetComponent<Image>().color;
+        color.a = 0;
+        background.GetComponent<Image>().color = color;
         LeanTweanScale(rewardPanel, 0f, Vector3.zero);
-        Debug.Log("check1"+hasGold);
         if (hasGold)
         {
             goldAnimaiton.Animation(increateGold);
 
         }
         hasGold = false;
-        Debug.Log("check2" + hasGold);
         StartCoroutine(Disable(rewardPanel));
     }
     private void LeanTweanScale(GameObject go, float time, Vector3 position) => LeanTween.scale(go, position, 0.3f).setEase(type).setDelay(time);

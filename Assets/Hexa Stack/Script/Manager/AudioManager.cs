@@ -98,7 +98,7 @@ public class AudioManager : MonoBehaviour
         newSource.clip = sfxSources[i].clip;
         newSource.Play();
 
-        Destroy(newSource, 0.3f);
+        Destroy(newSource, 3f);
     }
     public void StopSoundEffect(int i) => sfxSources[i].Stop(); 
 

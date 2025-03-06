@@ -65,6 +65,10 @@ public class StatsManager : MonoBehaviour
     private void Start()
     {
         // L?y s? tim hi?n t?i
+        SetCurrentLevel(0);
+        SetSelectLevel(0);
+
+
         currentHearts = PlayerPrefs.GetInt("Hearts", maxHearts);
 
         currentGolds = PlayerPrefs.GetInt("Golds", currentGolds);

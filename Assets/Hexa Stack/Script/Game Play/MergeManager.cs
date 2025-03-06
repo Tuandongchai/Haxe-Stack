@@ -68,6 +68,7 @@ public class MergeManager : MonoBehaviour
         //At this point we have a list of similar neighbors
         List<Hexagon> hexagonsToAdd = GetHexagonsToAdd(gridCellTopHexagonColor, similarNeighborGridCells.ToArray());
 
+
         //Remove the hexagons from their stacks
         RemoveHexagonsFromStacks(similarNeighborGridCells.ToArray(), hexagonsToAdd);
 
@@ -80,7 +81,7 @@ public class MergeManager : MonoBehaviour
         //
         MoveHexagons(gridCell, hexagonsToAdd);
         /*Wait to move*/
-        yield return new WaitForSeconds(0.2f + (hexagonsToAdd.Count + 1) * 0.01f);
+        yield return new WaitForSeconds(0.2f + (hexagonsToAdd.Count + 1) * 0.06f); //0.04
 
         /*yield return new WaitForSeconds(0.2f + (hexagonsToAdd.Count + 1) * 0.1f);*/
         // Is the stack on this cell complete
@@ -171,13 +172,14 @@ public class MergeManager : MonoBehaviour
         for (int i = 0; i < hexagonsToAdd.Count; i++)
         {
             Hexagon hexagon = hexagonsToAdd[i];
-
+            
             float targetY = initialY + i * .2f;
             Vector3 targetLocalPosition = Vector3.up * targetY;
 
             gridCell.Stack.Add(hexagon);
- 
+
             hexagon.MoveToLocal(targetLocalPosition);
+ 
         }
     }
     private IEnumerator CheckForCompleteStack(GridCell gridCell, Color topColor)
@@ -206,7 +208,6 @@ public class MergeManager : MonoBehaviour
             similarHexagons[0].SetParent(null);
             similarHexagons[0].Vanish(delay);
 
-            
             //DestroyImmediate(similarHexagons[0].gameObject);
 
             delay += 0.05f;
