@@ -77,8 +77,15 @@ public class MenuGameManager : MonoBehaviour
     {
         if (lv >StatsManager.Instance.GetCurrentLevel())
             return;
+
         levelSelectionUI.LoadOut();
+
+        //daily and weekly
+        int timePlay = (int)(Time.time/60);
+        GameData.instance.IncreatedCurrentWeeklyQuest(0, timePlay);
+        GameData.instance.IncreatedCurrentDailyQuest(0, timePlay);
         StartCoroutine(LoadLoadSelectLevelGameScene(lv));
+        
     }
     IEnumerator LoadLoadSelectLevelGameScene(int lv)
     {

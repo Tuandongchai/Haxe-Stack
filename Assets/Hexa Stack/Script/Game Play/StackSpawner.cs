@@ -23,12 +23,12 @@ public class StackSpawner : MonoBehaviour
         Application.targetFrameRate = 60;
 
         StackController.onStackPlaced += StackPlacedCallback;
-        RollTool.clicked += RollStacks;
+        RollButton.clicked += RollStacks;
     }
     private void OnDestroy()
     {
         StackController.onStackPlaced -= StackPlacedCallback;
-        RollTool.clicked -= RollStacks;
+        RollButton.clicked -= RollStacks;
     }
 
     

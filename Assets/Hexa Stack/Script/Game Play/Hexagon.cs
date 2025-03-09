@@ -84,8 +84,17 @@ public class Hexagon : MonoBehaviour
 
         LeanTween.rotateAround(gameObject, rotationAxis, 180, .3f)
             .setEase(LeanTweenType.easeInOutSine)
-            .setDelay(delay);
+            .setDelay(delay)
+            .setOnComplete(() =>
+            {
+                gameObject.transform.localRotation = Quaternion.Euler(
+                    gameObject.transform.localRotation.eulerAngles.x,
+                    0,
+                    gameObject.transform.localRotation.eulerAngles.z);
 
+            });
+
+        
     }
 
 

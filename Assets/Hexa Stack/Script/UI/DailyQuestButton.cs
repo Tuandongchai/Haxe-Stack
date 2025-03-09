@@ -4,16 +4,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class RollTool : MonoBehaviour
+[RequireComponent(typeof(Button))]
+public class DailyQuestButton : MonoBehaviour
 {
     private Button button;
-
-    public static Action clicked;
-
-    private void Awake()
+    public static Action onclicked;
+    void Start()
     {
         button = GetComponent<Button>();
 
-        button.onClick.AddListener(() => clicked?.Invoke());
+        button.onClick.AddListener(()=>onclicked?.Invoke());
     }
+
 }

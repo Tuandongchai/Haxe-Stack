@@ -36,6 +36,10 @@ public class WinUIAnimation : MonoBehaviour
     {
         AudioManager.instance.PlaySoundEffect(7);
 
+        int timePlay = (int)(Time.time / 60);
+        GameData.instance.IncreatedCurrentWeeklyQuest(0, timePlay);
+        GameData.instance.IncreatedCurrentDailyQuest(0, timePlay);
+
         LoadOut();
         StartCoroutine(ClosePanel());
     }

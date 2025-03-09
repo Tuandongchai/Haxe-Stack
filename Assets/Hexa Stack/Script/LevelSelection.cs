@@ -9,11 +9,11 @@ using System.Runtime.CompilerServices;
 public class LevelSelection : MonoBehaviour
 {
     [SerializeField] private GameObject levelPanel;
-    public GameObject levelPrefab;  // Prefab c?a level button
-    public Transform levelContainer;  // Panel ch?a level
-    public Button nextButton, prevButton;  // Nút ?i?u h??ng
-    public int levelsPerPage = 9;  // S? level m?i trang
-    public int totalLevels=50;
+    public GameObject levelPrefab; 
+    public Transform levelContainer;
+    public Button nextButton, prevButton;
+    public int levelsPerPage = 9; 
+    public int totalLevels=20;
 
     private int currentPage = 0;
     private int totalPages;
@@ -22,8 +22,6 @@ public class LevelSelection : MonoBehaviour
     private void Start()
     {
         currentPage = 0;
-        
-        
     }
 
     IEnumerator UpdateUI(int pageNumber)

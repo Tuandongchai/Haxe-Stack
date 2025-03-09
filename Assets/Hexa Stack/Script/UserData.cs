@@ -141,7 +141,7 @@ public class UserData : MonoBehaviour
     {
         System.Random random = new System.Random();
         Dictionary<string, int[]> newData = LoadData();
-        for (int i = 0; i < core+1; i++)
+        for (int i = 0; i < core; i++)
         {
             if (newData.ElementAt(i).Key == GameData.instance.GetName())
             {
@@ -160,5 +160,19 @@ public class UserData : MonoBehaviour
                               .ToDictionary(x => x.Key, x => x.Value);
         return sortedDict; 
 
+    }
+    public void UpdatePlayerScore(int core)
+    {
+        Dictionary<string, int[]> newData = LoadData();
+        for (int i = 0; i < core + 1; i++)
+        {
+            if (newData.ElementAt(i).Key == GameData.instance.GetName())
+            {
+                newData.ElementAt(i).Value[2] = StatsManager.Instance.GetCurrentLevel();
+                break;
+            }
+
+        }
+        SaveData(SortedDict(newData));
     }
 }

@@ -31,13 +31,13 @@ public class ToolsManager : MonoBehaviour
             Destroy(gameObject);
 
         moveTool = false;
-        RollTool.clicked += RollTools;
+        RollButton.clicked += RollTools;
         HammerButton.onClicked += HammerTool;
         MoveButton.clicked += SwapTool;
     }
     private void OnDestroy()
     {
-        RollTool.clicked -= RollTools;
+        RollButton.clicked -= RollTools;
         HammerButton.onClicked -= HammerTool;
         MoveButton.clicked -= SwapTool;
     }

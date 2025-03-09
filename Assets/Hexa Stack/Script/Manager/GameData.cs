@@ -23,15 +23,17 @@ public class GameData : MonoBehaviour
     private void Start()
     {
         filePath = Path.Combine(Application.persistentDataPath, "gameData.json");
-        /*if (!File.Exists(filePath))
-            SaveData();*/
-        SaveData();
+        if (!File.Exists(filePath))
+            SaveData();
+        /*SaveData();*/
         data =LoadData();  // Đọc dữ liệu từ file
         if (data["createdDay"] == "")
             data["createdDay"] = DateTime.Now.ToString("dd/MM/yyyy");
         if (data["currentDay"] == "")
             data["currentDay"] = DateTime.Now.ToString("dd/MM/yyyy");
         SaveData(data);
+
+        CheckDay();
     }
 
     public void SaveData(Dictionary<string, object> data = null)
@@ -48,12 +50,19 @@ public class GameData : MonoBehaviour
                 {"day", 1 },
                 {"newUserDay", 1},
                 {"attendanceDaily",new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}},
-                {"attendanceNewUser",new int[]{0,0,0,0,0,0,0}}
+                {"attendanceNewUser",new int[]{0,0,0,0,0,0,0}},
+                {"dailyQuestState", new int[]{-1,-1,-1,-1,-1,-1} },
+                {"weeklyQuestState", new int[]{-1,-1,-1,-1,-1,-1} },
+                {"totalQuantityDQ", new int[]{10,3,1000,3,3,3} },
+                {"curentQuantityDQ", new int[]{0,0,0,0,0,0} },
+                {"totalQuantityWQ", new int[]{60,30,10000,15,15,15} },
+                {"curentQuantityWQ", new int[]{0,0,0,0,0,0} }
             };
         }
 
         string json = JsonConvert.SerializeObject(data, Formatting.Indented);
         File.WriteAllText(filePath, json);
+
     }
 
     public Dictionary<string, object> LoadData()
@@ -119,14 +128,32 @@ public class GameData : MonoBehaviour
         Dictionary <string, object> data = LoadData();
         return (int)(long)data["object"];
     }
-
+    //dattendanceDaily
     public void CheckDay()
     {
-        if (DateTime.Parse(data["currentDay"].ToString()).Date < DateTime.Now.Date)
+        string currentDayStr = data["currentDay"].ToString();
+        DateTime currentDay;
+        if (DateTime.TryParseExact(currentDayStr, "dd/MM/yyyy",
+    System.Globalization.CultureInfo.InvariantCulture,
+    System.Globalization.DateTimeStyles.None, out currentDay))
         {
-            data["day"] = int.Parse(data["day"].ToString()) + 1;
-            data["currentDay"]=DateTime.Now.ToString("dd/MM/yyyy");
-            SaveData(data);
+            if (currentDay.Date < DateTime.Now.Date)
+            {
+                data["day"] = int.Parse(data["day"].ToString()) + 1;
+
+                data["newUserDay"] = int.Parse(data["newUserDay"].ToString()) + 1;
+                data["currentDay"] = DateTime.Now.ToString("dd/MM/yyyy");
+
+                SavedData(data);
+                ResetDailyQuest();
+                if (DateTime.Now.DayOfWeek == DayOfWeek.Tuesday)
+                {
+                    ResetWeeklyQuest();
+                }
+
+                Debug.Log("Check day Dữ liệu sau khi load lại lan nua: " + JsonConvert.SerializeObject(data, Formatting.Indented));
+                UserData.instance.UpdateScore(31);
+            }
         }
     }
     public int[] GetDayArray()
@@ -162,5 +189,114 @@ public class GameData : MonoBehaviour
     public int GetNUDay()
     {
         return int.Parse(data["newUserDay"].ToString());
+    }
+    //DailyQuest
+    public void ResetDailyQuest()
+    {
+        Dictionary<string, object> data = LoadData();
+
+        Debug.Log("trước khi lưu: " + JsonConvert.SerializeObject(data, Formatting.Indented));
+
+        data["dailyQuestState"] = new int[] { -1, -1, -1, -1, -1, -1 };
+        data["curentQuantityDQ"] = new int[] { 0, 0, 0, 0, 0, 0 };
+
+
+        SavedData(data);
+        Debug.Log("khong chay");
+
+        // Kiểm tra dữ liệu sau khi load lại
+        Dictionary<string, object> newData = LoadData();
+        Debug.Log("sau khi load lại: " + JsonConvert.SerializeObject(newData, Formatting.Indented));
+
+        /*Dictionary<string, object> data = LoadData();
+        data["dailyQuestState"] = new int[] { -1, -1, -1, -1, -1,-1 };
+        data["curentQuantityDQ"] = new int[] { 0, 0, 0, 0, 0, 0 };
+        SaveData(data);*/
+
+    }
+    public void SetClaimedDailyQuest(int i)
+    {
+        Dictionary<string, object> data = LoadData();
+        int[] dailyQuestArray = ((JArray)data["dailyQuestState"]).ToObject<int[]>();
+        dailyQuestArray[i] = 1;
+        data["dailyQuestState"] = dailyQuestArray;
+        SaveData(data);
+    }
+    public void SetCompleteDailyQuest(int i)
+    {
+        Dictionary<string, object> data = LoadData();
+        int[] dailyQuestArray = ((JArray)data["dailyQuestState"]).ToObject<int[]>();
+        dailyQuestArray[i] = 0;
+        data["dailyQuestState"] = dailyQuestArray;
+        SaveData(data);
+    }
+    public int[] GetDailyQuest()
+    {
+        Dictionary<string,object> data = LoadData();
+        return ((JArray)data["dailyQuestState"]).ToObject<int[]>();
+    }
+    
+    public int[] GetCurrentDailyQuest()
+    {
+        Dictionary<string, object> data = LoadData();
+        return ((JArray)data["curentQuantityDQ"]).ToObject<int[]>(); ;
+    }
+    public int[] GetTotalDailyQuest()
+    {
+        return ((JArray)data["totalQuantityDQ"]).ToObject<int[]>(); ;
+    }
+    public void IncreatedCurrentDailyQuest(int id, int increateQuantity)
+    {
+        Dictionary<string, object> data = LoadData();
+        int[] curentQuantityDQArray = ((JArray)data["curentQuantityDQ"]).ToObject<int[]>();
+        curentQuantityDQArray[id] += increateQuantity;
+        data["curentQuantityDQ"] = curentQuantityDQArray;
+        SaveData(data);
+    }
+    //WeeklyQuest
+    public void ResetWeeklyQuest()
+    {
+        Dictionary<string, object> data = LoadData();
+        data["weeklyQuestState"] = new int[] { -1, -1, -1, -1, -1, -1 };
+        data["curentQuantityWQ"] = new int[] { 0, 0, 0, 0, 0, 0 };
+        SaveData(data);
+    }
+    public void SetClaimWeeklyQuest(int i)
+    {
+        Dictionary<string, object> data = LoadData();
+        int[] weeklyQuestArray = ((JArray)data["weeklyQuestState"]).ToObject<int[]>();
+        weeklyQuestArray[i] = 1;
+        data["weeklyQuestState"] = weeklyQuestArray;
+        SaveData(data);
+    }
+    public void SetCompleteWeeklyQuest(int i)
+    {
+        Dictionary<string, object> data = LoadData();
+        int[] weeklyQuestArray = ((JArray)data["weeklyQuestState"]).ToObject<int[]>();
+        weeklyQuestArray[i] = 0;
+        data["weeklyQuestState"] = weeklyQuestArray;
+        SaveData(data);
+    }
+    public int[] GetWeeklyQuest()
+    {
+        Dictionary<string, object> data = LoadData();
+        return ((JArray)data["weeklyQuestState"]).ToObject<int[]>();
+    }
+    public int[] GetCurrentWeeklyQuest()
+    {
+        Dictionary<string, object> data = LoadData();
+        return ((JArray)data["curentQuantityWQ"]).ToObject<int[]>(); ;
+    }
+    public int[] GetTotalWeeklyQuest()
+    {
+        return ((JArray)data["totalQuantityWQ"]).ToObject<int[]>(); ;
+    }
+    public void IncreatedCurrentWeeklyQuest(int id, int increateQuantity)
+    {
+        Dictionary<string, object> data = LoadData();
+        int[] curentQuantityWQArray = ((JArray)data["curentQuantityWQ"]).ToObject<int[]>();
+        curentQuantityWQArray[id] += increateQuantity;
+        data["curentQuantityWQ"] = curentQuantityWQArray;
+        SaveData(data);
     }
 }

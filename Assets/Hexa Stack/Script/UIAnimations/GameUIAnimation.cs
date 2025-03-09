@@ -105,6 +105,10 @@ public class GameUIAnimation : MonoBehaviour
         loadScene.transform.localPosition = new Vector3(0, 3000f, 0);
         LeanTween.moveLocalY(loadScene, 0, 0.2f);
 
+        int timePlay = (int)(Time.time / 60);
+        GameData.instance.IncreatedCurrentWeeklyQuest(0, timePlay);
+        GameData.instance.IncreatedCurrentDailyQuest(0, timePlay);
+
         StartCoroutine(LoadMenuSence());
     }
     IEnumerator LoadMenuSence()

@@ -87,7 +87,7 @@ public class LevelManager : MonoBehaviour
     {
         GameUIManager.Instance.winUIAnimation.LoadOut();
         yield return new WaitForSeconds(0.5f);
-        StatsManager.Instance.IncreasedSelectLevel();
+        /*StatsManager.Instance.IncreasedSelectLevel();*/
         SceneManager.LoadScene(1);
 
     }
@@ -114,6 +114,10 @@ public class LevelManager : MonoBehaviour
             yield break;
         GameManager.instance.SetGameState(GameState.Win);
         StatsManager.Instance.IncreasedSuns(piecesRequire);
+        StatsManager.Instance.IncreasedSelectLevel();
+        UserData.instance.UpdatePlayerScore(31);
+        
+
         GameUIManager.Instance.winUIAnimation.LoadIn();
     }
     public void Lose()

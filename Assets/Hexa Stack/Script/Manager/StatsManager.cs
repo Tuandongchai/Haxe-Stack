@@ -170,6 +170,9 @@ public class StatsManager : MonoBehaviour
         currentGolds -= golds;
 
         PlayerPrefs.SetInt("Golds", currentGolds);
+
+        GameData.instance.IncreatedCurrentDailyQuest(2,golds);
+        GameData.instance.IncreatedCurrentWeeklyQuest(2,golds);
         PlayerPrefs.Save();
     }
     //
@@ -215,8 +218,13 @@ public class StatsManager : MonoBehaviour
     public void IncreasedSelectLevel()
     {
         PlayerPrefs.SetInt("SelectLevel", GetSelectLevel()+1);
-        if(GetSelectLevel()>=GetCurrentLevel())
+        if (GetSelectLevel() >= GetCurrentLevel())
+        {
             SetCurrentLevel(GetSelectLevel());
+
+            GameData.instance.IncreatedCurrentDailyQuest(1,1);
+            GameData.instance.IncreatedCurrentWeeklyQuest(1, 1);
+        }
         PlayerPrefs.Save();
     }
         
@@ -238,9 +246,11 @@ public class StatsManager : MonoBehaviour
     {
         switch (a)
         {
+            
             case 0:
                 currentHammer--;
                 PlayerPrefs.SetInt("Hammers", currentHammer);
+
                 PlayerPrefs.Save();
                 break;
             case 1:
@@ -256,6 +266,8 @@ public class StatsManager : MonoBehaviour
             default:
                 break;
         }
+        GameData.instance.IncreatedCurrentDailyQuest(a+3,1);
+        GameData.instance.IncreatedCurrentWeeklyQuest(a+3,1);
     }
     public void IncreasedTool(int a, int b)
     {
