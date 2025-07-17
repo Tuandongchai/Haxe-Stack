@@ -23,18 +23,20 @@ public class StackSpawner : MonoBehaviour
         Application.targetFrameRate = 60;
 
         StackController.onStackPlaced += StackPlacedCallback;
-        RollButton.clicked += RollStacks;
+        RollButton.onClicked += RollStacks;
     }
     private void OnDestroy()
     {
         StackController.onStackPlaced -= StackPlacedCallback;
-        RollButton.clicked -= RollStacks;
+        RollButton.onClicked -= RollStacks;
     }
 
     
     private void StackPlacedCallback(GridCell cell)
     {
-        if (ToolsManager.Instance.moveTool == true || ToolsManager.Instance.useTool == true)
+        /*if (ToolsManager.Instance.moveTool == true || ToolsManager.Instance.useTool == true)
+            return;*/
+        if (ToolManager.Instance.swapTool.moveTool == true || ToolManager.Instance.hammerTool.useTool == true)
             return;
         stackCounter++;
         if(stackCounter >= 3)

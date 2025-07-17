@@ -18,6 +18,8 @@ public class MenuGameManager : MonoBehaviour
     public ShaderUIAnimation shaderUIAnimation;
     public LevelSelection levelSelectionUI;
 
+    public GameObject Loading, LoadingUI;
+
     private void Start()
     {
         if (instance == null)
@@ -25,6 +27,9 @@ public class MenuGameManager : MonoBehaviour
         else
             Destroy(gameObject);
         LevelButton.onClicked += SelectLevel;
+
+        Loading.SetActive(false);
+        LoadingUI.SetActive(false);
     }
     private void OnDestroy()
     {
@@ -71,7 +76,14 @@ public class MenuGameManager : MonoBehaviour
         /*PlayerPrefs.SetInt("Level", 0);*/
         menuUIAnimation.LoadGamePlayScence();
         yield return new WaitForSeconds(1.5f);
-        SceneManager.LoadScene(1);
+
+        /*LoadingManager.instance.nameScene = "PlayScene";
+        SceneManager.LoadScene(0);*/
+
+        Loading.SetActive(true);
+        LoadingUI.SetActive(true);
+
+        /*SceneManager.LoadScene(2);*/
     }
     public void SelectLevel(int lv)
     {
@@ -94,7 +106,13 @@ public class MenuGameManager : MonoBehaviour
         menuUIAnimation.LoadGamePlayScence();
         
         yield return new WaitForSeconds(1.5f);
-        SceneManager.LoadScene(1);
+
+        /*LoadingManager.instance.nameScene = "PlayScene";
+        SceneManager.LoadScene(0);*/
+
+        Loading.SetActive(true);
+        LoadingUI.SetActive(true);
+        /*SceneManager.LoadScene(2);*/
     }
     public void SetGameState(MenuState gameState)
     {

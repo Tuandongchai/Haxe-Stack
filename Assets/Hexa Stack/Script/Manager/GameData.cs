@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 using Newtonsoft.Json.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 public class GameData : MonoBehaviour
 {
@@ -56,7 +57,9 @@ public class GameData : MonoBehaviour
                 {"totalQuantityDQ", new int[]{10,3,1000,3,3,3} },
                 {"curentQuantityDQ", new int[]{0,0,0,0,0,0} },
                 {"totalQuantityWQ", new int[]{60,30,10000,15,15,15} },
-                {"curentQuantityWQ", new int[]{0,0,0,0,0,0} }
+                {"curentQuantityWQ", new int[]{0,0,0,0,0,0} },
+                {"DQBonusState", new int[]{-1,-1,-1 } },
+                {"WQBonusState", new int[]{-1,-1,-1}}
             };
         }
 
@@ -114,6 +117,9 @@ public class GameData : MonoBehaviour
     {
         Dictionary<string, object> data = LoadData();
         List<float> listFill = (List<float>)data["fill"];
+        //chua bo sung them gameObject tam thoi de if o day tranh loi
+        if (i == 4)
+            return i = 3;
         return listFill[i];
 
     }
@@ -126,6 +132,7 @@ public class GameData : MonoBehaviour
     public int GetObjectFill()
     {
         Dictionary <string, object> data = LoadData();
+        //Co them object thi return sau sau
         return (int)(long)data["object"];
     }
     //dattendanceDaily
@@ -152,7 +159,9 @@ public class GameData : MonoBehaviour
                 }
 
                 Debug.Log("Check day Dữ liệu sau khi load lại lan nua: " + JsonConvert.SerializeObject(data, Formatting.Indented));
-                UserData.instance.UpdateScore(31);
+
+                //bug singleton chua duoc
+                /*UserData.instance.UpdateScore(31);*/
             }
         }
     }
@@ -299,4 +308,54 @@ public class GameData : MonoBehaviour
         data["curentQuantityWQ"] = curentQuantityWQArray;
         SaveData(data);
     }
+
+    //DailyQuestBonus
+    public int GetDQBonusState(int _id)
+    {
+        Dictionary<string, object> data = LoadData() ;
+        int[] DQBonusState = ((JArray)data["DQBonusState"]).ToObject<int[]>();
+        return DQBonusState[_id];
+    }
+    public void SetClaimDQBonus(int i)
+    {
+        Dictionary<string, object> data = LoadData();
+        int[] DQBonusState = ((JArray)data["DQBonusState"]).ToObject<int[]>();
+        DQBonusState[i] = 1;
+        data["DQBonusState"] = DQBonusState;
+        SaveData(data);
+    }
+    public void SetCompleteDQBonus(int i)
+    {
+        Dictionary<string, object> data = LoadData();
+        int[] DQBonusState = ((JArray)data["DQBonusState"]).ToObject<int[]>();
+        DQBonusState[i] = 0;
+        data["DQBonusState"] = DQBonusState;
+        SaveData(data);
+    }
+    //WeeklyQuestBonus
+    public int GetWQBonusState(int _id)
+    {
+        Dictionary<string, object> data = LoadData();
+        int[] WQBonusState = ((JArray)data["WQBonusState"]).ToObject<int[]>();
+        Debug.Log(_id);
+        
+        return WQBonusState[_id];
+    }
+    public void SetClaimWQBonus(int i)
+    {
+        Dictionary<string, object> data = LoadData();
+        int[] WQBonusState = ((JArray)data["WQBonusState"]).ToObject<int[]>();
+        WQBonusState[i] = 1;
+        data["WQBonusState"] = WQBonusState;
+        SaveData(data);
+    }
+    public void SetCompleteWQBonus(int i)
+    {
+        Dictionary<string, object> data = LoadData();
+        int[] WQBonusState = ((JArray)data["WQBonusState"]).ToObject<int[]>();
+        WQBonusState[i] = 0;
+        data["WQBonusState"] = WQBonusState;
+        SaveData(data);
+    }
+    
 }

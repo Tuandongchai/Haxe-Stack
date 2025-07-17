@@ -38,7 +38,9 @@ public class FillElement : MonoBehaviour
     }
     protected virtual void Fill(int count)
     {
-        if (StatsManager.Instance.GetCurrentSuns()<=0)
+        /*if (count == 4)
+            return;*/
+        if (StatsManager.Instance.GetCurrentSuns()<=0.1)
             return;
         if (count != element)
             return;

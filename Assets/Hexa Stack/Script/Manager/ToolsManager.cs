@@ -1,13 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+#if UNITY_EDITOR
 using UnityEditor.Experimental.GraphView;
+#endif
+
 using UnityEngine;
-using System;
+using System;                                                                      
 
 public class ToolsManager : MonoBehaviour
 {
-    public static ToolsManager Instance;
+    public static ToolsManager Instance;                     
 
     [Header("Elements")]
     [SerializeField] private GameObject stackSpawner;
@@ -31,15 +34,15 @@ public class ToolsManager : MonoBehaviour
             Destroy(gameObject);
 
         moveTool = false;
-        RollButton.clicked += RollTools;
+        RollButton.onClicked += RollTools;
         HammerButton.onClicked += HammerTool;
-        MoveButton.clicked += SwapTool;
+        MoveButton.onClicked += SwapTool;
     }
     private void OnDestroy()
     {
-        RollButton.clicked -= RollTools;
+        RollButton.onClicked -= RollTools;
         HammerButton.onClicked -= HammerTool;
-        MoveButton.clicked -= SwapTool;
+        MoveButton.onClicked -= SwapTool;
     }
     private void Update()
     {
@@ -47,10 +50,10 @@ public class ToolsManager : MonoBehaviour
             return;
         if(Input.GetMouseButtonDown(0))
             ManageMouseDown();
-        if (!moveTool)
+        /*if (!moveTool)
         {
 
-        }
+        }*/
 
     }
     private void RollTools()

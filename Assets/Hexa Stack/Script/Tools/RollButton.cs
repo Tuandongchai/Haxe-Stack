@@ -4,16 +4,29 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class RollButton : MonoBehaviour
+public class RollButton : BaseButton,IToolButton
 {
-    private Button button;
+    [SerializeField] private GameObject clocked;
+    public static Action onClicked;
 
-    public static Action clicked;
-
-    private void Awake()
+    protected override void Start()
     {
-        button = GetComponent<Button>();
+        base.Start();
+        if (!Locked())
+            clocked.SetActive(true);
+        else clocked.SetActive(false);
+    }
 
-        button.onClick.AddListener(() => clicked?.Invoke());
+    protected override void OnButtonClick()
+    {
+        if (clocked.activeSelf)
+            return;
+        onClicked?.Invoke();
+
+    }
+
+    public bool Locked()
+    {
+        return StatsManager.Instance.GetCurrentLevel() >= 1;
     }
 }

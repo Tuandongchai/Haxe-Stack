@@ -26,9 +26,10 @@ public class StackController : MonoBehaviour
         if (GameManager.instance.gameState != GameState.Play)
             return;
         
-        if (ToolsManager.Instance.useTool == true)
+        /*if (ToolsManager.Instance.useTool == true)
+            return;*/
+        if (ToolManager.Instance.hammerTool.useTool == true)
             return;
-
         if (Input.GetMouseButtonDown(0))
             ManageMouseDown();
         else if (Input.GetMouseButton(0) && currentStack != null)
@@ -125,7 +126,9 @@ public class StackController : MonoBehaviour
 
         }
         AudioManager.instance.PlaySoundEffect(4);
-        if(ToolsManager.Instance.moveTool==true)
+        /*if(ToolsManager.Instance.moveTool==true)
+            currentStack.transform.parent.GetComponent<GridCell>().AssignStack(null);*/
+        if (ToolManager.Instance.swapTool.moveTool == true)
             currentStack.transform.parent.GetComponent<GridCell>().AssignStack(null);
         currentStack.transform.position = targetCell.transform.position.With(y: 0.2f);
         currentStack.transform.SetParent(targetCell.transform);
@@ -138,10 +141,15 @@ public class StackController : MonoBehaviour
 
         targetCell = null;
         currentStack = null;
-        if (ToolsManager.Instance.moveTool == true)
+        /*if (ToolsManager.Instance.moveTool == true)
         {
             ToolsManager.Instance.EndTool();
             
+        }*/
+        if (ToolManager.Instance.swapTool.moveTool== true)
+        {
+            ToolManager.Instance.swapTool.EndTool();
+
         }
     }
     private Ray GetClickedRay()=> Camera.main.ScreenPointToRay(Input.mousePosition);

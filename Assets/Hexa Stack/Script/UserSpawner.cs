@@ -66,7 +66,7 @@ public class UserSpawner : MonoBehaviour
             newUser.transform.SetParent(transform);
             
 
-            User user = newUser.GetComponent<User>();
+            UserSetup user = newUser.GetComponent<UserSetup>();
 
             if (data.ElementAt(i).Key == GameData.instance.GetName())
                 SetPlayerRank((i + 1).ToString(), data.ElementAt(i).Key, data.ElementAt(i).Value[2].ToString()

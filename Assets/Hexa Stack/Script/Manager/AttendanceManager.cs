@@ -30,14 +30,15 @@ public class AttendanceManager : MonoBehaviour
         GameData.instance.SetDayArray(list);
         StatsManager.Instance.IncreasedGolds(gold);
         StatsManager.Instance.IncreasedTool(0, hammer);
-        StatsManager.Instance.IncreasedTool(0, swaps);
-        StatsManager.Instance.IncreasedTool(0, rolls);
+        StatsManager.Instance.IncreasedTool(1, swaps);
+        StatsManager.Instance.IncreasedTool(2, rolls);
 
         int[] amountArray = new int[] { gold, hammer, swaps, rolls};
+        Debug.Log(string.Join(", ", amountArray));
         Dictionary<string, int> rewardDict = new Dictionary<string, int> { };
         for(int i=0; i< amountArray.Length; i++)
         {
-            if (amountArray[i] == 0) break;
+            if (amountArray[i] == 0) continue;
             
             switch (i)
             {
@@ -57,6 +58,7 @@ public class AttendanceManager : MonoBehaviour
                     break;
             }
         }
+        Debug.Log(string.Join(", ", rewardDict));
         RewardPopup.instance.ShowReward(rewardDict);
     }
     public void NUAttendance(int day, int gold, int hammer, int swaps, int rolls)
@@ -73,7 +75,7 @@ public class AttendanceManager : MonoBehaviour
         Dictionary<string, int> rewardDict = new Dictionary<string, int> { };
         for (int i = 0; i < amountArray.Length; i++)
         {
-            if (amountArray[i] == 0) break;
+            if (amountArray[i] == 0) continue;
 
             switch (i)
             {

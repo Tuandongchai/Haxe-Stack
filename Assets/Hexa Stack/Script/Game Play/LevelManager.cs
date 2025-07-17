@@ -23,6 +23,9 @@ public class LevelManager : MonoBehaviour
 
     private int currentLv;
 
+
+
+    [SerializeField] private GameObject LoadingUI, LoadGameMenu, LoadingGamePlay;
     private void Awake()
     {
         if (Instance == null)
@@ -88,8 +91,11 @@ public class LevelManager : MonoBehaviour
         GameUIManager.Instance.winUIAnimation.LoadOut();
         yield return new WaitForSeconds(0.5f);
         /*StatsManager.Instance.IncreasedSelectLevel();*/
-        SceneManager.LoadScene(1);
 
+        LoadingUI.SetActive(true);
+        LoadingGamePlay.SetActive(true);
+
+        /*SceneManager.LoadScene(1);*/
     }
    
 
@@ -104,7 +110,10 @@ public class LevelManager : MonoBehaviour
         /*GameUIManager.Instance.gameUIAnimation.settingPanel.SetActive(false);*/
         GameUIManager.Instance.winUIAnimation.LoadOut();
         yield return new WaitForSeconds(0.5f);
-        SceneManager.LoadScene(1);
+
+        LoadingUI.SetActive(true);
+        LoadingGamePlay.SetActive(true);
+        /*SceneManager.LoadScene(1);*/
 
     }
     IEnumerator Win()
@@ -139,7 +148,7 @@ public class LevelManager : MonoBehaviour
     {
         if (GameState.Lose == GameManager.instance.gameState)
             yield break;
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
 
         for (int i = 0; i < childCount; i++)
         {

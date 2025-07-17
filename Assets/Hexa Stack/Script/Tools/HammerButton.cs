@@ -4,14 +4,29 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HammerButton : MonoBehaviour
+public class HammerButton : BaseButton,IToolButton
 {
-    public Button button;
+    [SerializeField] private GameObject clocked;   
     public static Action onClicked;
 
-    private void Awake()
+    protected override void Start()
     {
-        button = GetComponent<Button>();
-        button.onClick.AddListener(()=> onClicked?.Invoke());
+        base.Start();
+        if(!Locked())
+            clocked.SetActive(true);
+        else clocked.SetActive(false);
+    }
+
+    protected override void OnButtonClick()
+    {
+        if (clocked.activeSelf)
+            return;
+        onClicked?.Invoke();
+            
+    }
+
+    public bool Locked()
+    {
+        return StatsManager.Instance.GetCurrentLevel() >= 0;
     }
 }

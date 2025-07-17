@@ -4,14 +4,29 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MoveButton : MonoBehaviour
+public class MoveButton : BaseButton, IToolButton
 {
-    private Button button;
-    public static Action clicked;
+    [SerializeField] private GameObject clocked;
+    public static Action onClicked;
 
-    private void Awake()
+    protected override void Start()
     {
-        button = GetComponent<Button>();
-        button.onClick.AddListener(()=>clicked?.Invoke());
+        base.Start();
+        if (!Locked())
+            clocked.SetActive(true);
+        else clocked.SetActive(false);
+    }
+
+    protected override void OnButtonClick()
+    {
+        if (clocked.activeSelf)
+            return;
+        onClicked?.Invoke();
+
+    }
+
+    public bool Locked()
+    {
+        return StatsManager.Instance.GetCurrentLevel() >= 1;
     }
 }

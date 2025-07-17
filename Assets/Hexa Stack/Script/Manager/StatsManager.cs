@@ -65,8 +65,14 @@ public class StatsManager : MonoBehaviour
     private void Start()
     {
         // L?y s? tim hi?n t?i
-        SetCurrentLevel(0);
+        /*SetCurrentLevel(0);
         SetSelectLevel(0);
+        PlayerPrefs.SetInt("Hearts", 5);
+        PlayerPrefs.SetInt("Golds", 100);
+        PlayerPrefs.SetFloat("Suns", 10);
+        PlayerPrefs.SetInt("Hammers", 2);
+        PlayerPrefs.SetInt("Lightning", 2);
+        PlayerPrefs.SetInt("Rolls", 2);*/
 
 
         currentHearts = PlayerPrefs.GetInt("Hearts", maxHearts);
@@ -167,8 +173,9 @@ public class StatsManager : MonoBehaviour
     {
         if (golds>currentGolds)
             return;
+        Debug.Log("name: "+ gameObject.name);
         currentGolds -= golds;
-
+        
         PlayerPrefs.SetInt("Golds", currentGolds);
 
         GameData.instance.IncreatedCurrentDailyQuest(2,golds);
@@ -252,6 +259,7 @@ public class StatsManager : MonoBehaviour
                 PlayerPrefs.SetInt("Hammers", currentHammer);
 
                 PlayerPrefs.Save();
+                Debug.Log("it ha: ");
                 break;
             case 1:
                 currentLightning--;
